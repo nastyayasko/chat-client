@@ -1,0 +1,145 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  
+}
+body {
+  background-color: lightgray !important;
+}
+
+.my-container {
+  width: 850px;
+  margin: 0 auto;
+  font-family: Arial, Helvetica, sans-serif;
+  
+}
+.welcome-head {
+  padding: 30px;
+  text-align: center;
+  color: white;
+  font-size: 55px;
+}
+
+.clearfix:after {
+  content: '';
+  display: table;
+  clear: both;
+}
+
+.form-group{
+  margin: 0 auto;
+}
+
+#auth {
+  width: 400px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.7);
+  text-align: center;
+  margin: 20px auto;
+  background-color: white;
+  border-radius: 5px;
+}
+
+.sign-in {
+  padding-top: 30px;
+  font-size: 25px;
+  color: gray;
+  font-weight: bold;
+}
+.buttons {
+  padding: 30px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.g-signin2 {
+  padding: 20px 60px;
+  opacity: 0;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.google {
+  color: rgb(206, 49, 28);
+  font-size: 40px;
+  padding: 20px;
+  position: relative;
+}
+
+.facebook {
+  color: rgb(35, 24, 138);
+  font-size: 40px;
+  padding: 20px;
+}
+
+.google:hover, .facebook:hover{
+  opacity: 0.6;
+  box-shadow: 0 0 5px rgba(0,0,0,0.5);
+}
+
+.message-area {
+  margin: 20px auto;
+  background: rgb(240, 239, 239);
+  border: 1px solid rgb(204, 204, 203);
+  border-radius: 10px;
+}
+
+.chat-window {
+  float: left;
+  width: 70%;
+  height: 500px;
+  overflow: auto;
+  margin: 0 auto;
+  background: rgb(240, 239, 239);
+  border: 1px solid rgb(204, 204, 203);
+  border-radius: 10px;
+}
+
+.list-area {
+  float: right;
+  width: 25%;
+  height: 500px;
+  overflow: auto;
+  margin: 0 auto;
+  background: rgb(240, 239, 239);
+  border: 1px solid rgb(204, 204, 203);
+  border-radius: 10px;
+}
+
+.list {
+  color:  rgb(206, 49, 28);
+  padding-bottom: 3px;
+  border-bottom: 1px solid  rgba(204, 204, 203, 0.5);
+  text-align: center;
+}
+
+.person {
+  display: flex;
+}
+
+.my-message {
+  width: 250px;
+  background: rgb(126, 210, 243);
+  border: 1px solid rgb(112, 193, 224);
+  border-radius: 3px;
+  float: right;
+}
+
+.message {
+  width: 250px;
+  background: rgb(250, 213, 238);
+  border: 1px solid rgb(233, 182, 217);
+  border-radius: 3px;
+  float: left;
+}
+
+.user-name {
+  font-weight: bold;
+}
+
+span {
+  font-weight: normal;
+  font-style: italic;
+  font-size: 12px;
+}
