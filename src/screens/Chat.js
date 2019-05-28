@@ -2,8 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {deleteEmail} from '../redux/actions'
 
-import Message from '../components/Message';
-// import ChatArea from '../components/ChatArea';
+import ChatArea from '../components/ChatArea';
 import ListArea from '../components/ListArea';
 
 class Chat extends React.Component {
@@ -11,7 +10,7 @@ class Chat extends React.Component {
     message: '',
     messages: [],
   }
-  connection = new WebSocket('ws://localhost:3010');
+  connection = new WebSocket('ws://192.168.0.140:3010');
 
   handleChange = (e) => {
     const {name, value} = e.target;
@@ -24,7 +23,6 @@ class Chat extends React.Component {
     const {message} = this.state;
     if (!message) return;
     const time = new Date();
-    console.log(time);
     const myMesage = {email, message,time};
     this.setState({message:''});
     this.connection.send(JSON.stringify(myMesage));
@@ -36,12 +34,16 @@ class Chat extends React.Component {
   }
   componentDidMount() {
     const {messages} = this.state;
+    const {email} = this.props;
     this.connection.onmessage = message => {
       const data = JSON.parse(message.data);
       messages.push(data);
       this.setState({messages});
     };
-    this.connection.onopen = () => console.log('online');
+    this.connection.onopen = () => {
+      console.log('online');
+      this.connection.send(email);
+    };
     this.connection.onclose = () => console.log('offline');
   }
 
@@ -54,21 +56,11 @@ class Chat extends React.Component {
           <button className='btn btn-danger mt-3 mr-3' style={{float:'right'}} onClick={this.handleLogout}>LogOut</button>
         </div>
         <div className='chat-area clearfix mb-3'>
-          <div className='chat-window clearfix mt-3'>
-            {
-              messages.map((message, i) => {
-                return (
-                  <Message className={`${message.email === email ? 'my-message m-3' : 'message m-3'}`} key={i} message={message}/>
-                )
-              })
-            }
-          </div>
-          {/* <ChatArea messages={messages}/> */}
+          <ChatArea messages={messages}  email={email}/>
           <ListArea />
         </div>
         <div className='message-area mb-3'>
           <form onSubmit={this.handleSubmit}>
-
             <div className="form-group row mx-auto mt-3">
               <label className="col-form-label m-2">{email}</label>
               <div className="col-sm-7">

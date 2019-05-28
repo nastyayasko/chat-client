@@ -17,6 +17,7 @@ class HomePage extends React.Component {
   handleSubmit = (e) => {
     e.preventDefault();
     const {email} = this.state;
+    if (!email) return;
     this.props.saveEmail(email);
     this.setState({email:''});
     this.props.history.push('/chat');
