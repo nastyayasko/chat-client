@@ -100,11 +100,11 @@ body {
   float: right;
   width: 25%;
   height: 500px;
-  overflow: auto;
   margin: 0 auto;
   background: rgb(240, 239, 239);
   border: 1px solid rgb(204, 204, 203);
   border-radius: 10px;
+  overflow-y: auto;
 }
 
 .list {
@@ -112,10 +112,6 @@ body {
   padding-bottom: 3px;
   border-bottom: 1px solid  rgba(204, 204, 203, 0.5);
   text-align: center;
-}
-
-.person {
-  display: flex;
 }
 
 .my-message {
@@ -142,4 +138,22 @@ span {
   font-weight: normal;
   font-style: italic;
   font-size: 12px;
+}
+
+.email {
+  width: 50%;
+}
+.person-btns {
+  display: flex;
+  justify-content: space-around;
+}
+
+.person {
+  padding: 5px 0;
+  border-bottom: 1px solid rgb(204, 204, 203);
+}
+.chat-status{
+  text-align: center;
+  color: rgb(206, 49, 28);
+  
 }

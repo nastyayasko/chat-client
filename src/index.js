@@ -8,7 +8,7 @@ import {Provider} from 'react-redux';
 
 import * as serviceWorker from './serviceWorker';
 import App from './App';
-import reducers from './redux/reduser';
+import reducers from './redux/reducer';
 
 const store = createStore(reducers);
 

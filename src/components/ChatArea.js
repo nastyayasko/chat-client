@@ -1,8 +1,9 @@
 import React from 'react';
 import Message from './Message';
 
-const ChatArea = ({ messages, email }) => (
-  <div className="chat-window clearfix mt-3">
+const ChatArea = ({ messages, email, chatRef }) => {
+  
+  return (<div className="chat-window clearfix mt-3" ref = {chatRef}>
     {messages.map((message, i) => {
       return (
         <Message
@@ -14,7 +15,7 @@ const ChatArea = ({ messages, email }) => (
         />
       );
     })}
-  </div>
-);
+  </div>)
+};
 
 export default ChatArea;
