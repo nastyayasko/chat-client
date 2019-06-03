@@ -9,8 +9,8 @@ class App extends React.Component {
 
       // <Route path=''       component={NotFoundPage} />
       <div className="App">
-        <Route exact path='/'       component={HomePage}  />
-        <Route exact path='/chat'       component={Chat} />
+        <Route exact path='/'             component={HomePage}  />
+        <Route exact path='/chat'         component={Chat} />
       </div>
     );
   }

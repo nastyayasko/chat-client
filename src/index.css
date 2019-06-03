@@ -143,11 +143,14 @@ span {
 .email {
   width: 50%;
 }
-.person-btns {
+.person-btns{
   display: flex;
   justify-content: space-around;
 }
-
+ .blocked-person {
+  display: flex;
+  justify-content: space-around;
+ }
 .person {
   padding: 5px 0;
   border-bottom: 1px solid rgb(204, 204, 203);

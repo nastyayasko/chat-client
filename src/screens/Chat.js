@@ -4,6 +4,8 @@ import {deleteEmail} from '../redux/actions'
 
 import ChatArea from '../components/ChatArea';
 import ListArea from '../components/ListArea';
+import ModalBL from '../components/ModalBL';
+import BlackList from '../components/BlackList';
 
 class Chat extends React.Component {
   state = {
@@ -11,6 +13,8 @@ class Chat extends React.Component {
     messages: [],
     people: [],
     status: '',
+    isModalOpen: false,
+    blackList: [],
   }
   connection = window.io.connect('http://localhost:3020');
   chatRef = React.createRef();
@@ -25,8 +29,9 @@ class Chat extends React.Component {
     const {email} = this.props;
     const {message} = this.state;
     if (!message) return;
-    const time = new Date();
-    const myMesage = {email, message,time};
+    const time = new Date().toString().split(' ');
+    const newTime = `${time[2]} ${time[1]} ${time[3]} ${time[4]}`;
+    const myMesage = {email, message,time: newTime};
     this.setState({message:''});
     this.connection.emit('chat', myMesage);
   }
@@ -40,22 +45,31 @@ class Chat extends React.Component {
     this.connection.emit('connect-user', i);
   }
   handleBlock = (i) => {
-    console.log(i);
-    const {email} = this.props;
-    this.connection.send(JSON.stringify({email: email, block: i}));
+    this.connection.emit('block-user', i);
   }
+  toggleModal = ()=>{
+    const {isModalOpen} = this.state;
+    this.setState({isModalOpen: !isModalOpen});
+  } 
   toGlobalChat = () => {
     this.connection.emit('global');
+  }
+  toBlackList = () => {
+    this.connection.emit('black-list');
+    this.toggleModal();
   }
   scrollToBottom() {
     this.chatRef.current.scrollTop = this.chatRef.current.scrollHeight - this.chatRef.current.clientHeight;
   }
+  restoreUser = (i) => {
+    this.connection.emit('restore-user', i);
+  }
   componentDidMount() {
-    const {messages} = this.state;
     const {email} = this.props;
     this.connection.emit('email', email);
 
     this.connection.on('chat', (data) => {
+      const {messages} = this.state;
       messages.push(data);
       this.setState({messages});
       this.scrollToBottom();
@@ -66,6 +80,12 @@ class Chat extends React.Component {
     })
     this.connection.on('status', (status) => {
       this.setState({status});
+    })
+    this.connection.on('clear', () => {
+      this.setState({messages:[]});
+    })
+    this.connection.on('black-list', (blackList) => {
+      this.setState({blackList});
     })
     
     this.connection.on('connect', () => {
@@ -79,12 +99,16 @@ class Chat extends React.Component {
 
   render (){
     const {email} = this.props;
-    const {message, messages, people, status} = this.state;
+    const {message, messages, people, status, isModalOpen, blackList} = this.state;
     return (
       <div className='container clearfix'>
+        <ModalBL isModalOpen={isModalOpen} toggle={this.toggleModal}>
+          <BlackList list={blackList} restoreUser={this.restoreUser}/>
+        </ModalBL>
         <div className='clearfix'>
           <h2 className='chat-status mt-3 mr-3'style={{float:'left'}}>{status}</h2>
           <div style={{float:'right'}} >
+            <button className='btn btn-dark mt-3 mr-3' onClick={this.toBlackList}>Black List</button>
             <button className='btn btn-danger mt-3 mr-3' onClick={this.toGlobalChat}>Global Chat</button>
             <button className='btn btn-danger mt-3 mr-3' onClick={this.handleLogout}>LogOut</button>
           </div>
