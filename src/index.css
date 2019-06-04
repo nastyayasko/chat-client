@@ -6,6 +6,11 @@
 }
 body {
   background-color: lightgray !important;
+  font-size: 12px !important;
+}
+.btn {
+  font-size: 13px !important;
+  padding: 3px 7px !important;
 }
 
 .my-container {
@@ -88,7 +93,7 @@ body {
 .chat-window {
   float: left;
   width: 70%;
-  height: 500px;
+  height: 450px;
   overflow: auto;
   margin: 0 auto;
   background: rgb(240, 239, 239);
@@ -99,11 +104,29 @@ body {
 .list-area {
   float: right;
   width: 25%;
-  height: 500px;
+  height: 450px;
   margin: 0 auto;
+  
+}
+.people-online-area {
+  height: 220px;
   background: rgb(240, 239, 239);
   border: 1px solid rgb(204, 204, 203);
   border-radius: 10px;
+  overflow-y: auto;
+}
+.people-online {
+  margin: 0 10px;
+  
+}
+.dialogs-area {
+  height: 220px;
+  background: rgb(240, 239, 239);
+  border: 1px solid rgb(204, 204, 203);
+  border-radius: 10px;
+  margin-top: 10px;
+}
+.dialogs {
   overflow-y: auto;
 }
 
@@ -112,7 +135,9 @@ body {
   padding-bottom: 3px;
   border-bottom: 1px solid  rgba(204, 204, 203, 0.5);
   text-align: center;
+  font-size: 22px;
 }
+
 
 .my-message {
   width: 250px;
@@ -152,11 +177,11 @@ span {
   justify-content: space-around;
  }
 .person {
-  padding: 5px 0;
+  padding-bottom: 5px;
   border-bottom: 1px solid rgb(204, 204, 203);
 }
 .chat-status{
   text-align: center;
   color: rgb(206, 49, 28);
-  
+  font-size: 20px;
 }

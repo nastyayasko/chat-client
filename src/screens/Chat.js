@@ -4,6 +4,7 @@ import {deleteEmail} from '../redux/actions'
 
 import ChatArea from '../components/ChatArea';
 import ListArea from '../components/ListArea';
+import DialogsArea from '../components/DialogsArea';
 import ModalBL from '../components/ModalBL';
 import BlackList from '../components/BlackList';
 
@@ -16,7 +17,7 @@ class Chat extends React.Component {
     isModalOpen: false,
     blackList: [],
   }
-  connection = window.io.connect('http://localhost:3020');
+  connection = window.io.connect('http://192.168.0.208:3020');
   chatRef = React.createRef();
   
   handleChange = (e) => {
@@ -55,7 +56,6 @@ class Chat extends React.Component {
     this.connection.emit('global');
   }
   toBlackList = () => {
-    this.connection.emit('black-list');
     this.toggleModal();
   }
   scrollToBottom() {
@@ -75,7 +75,7 @@ class Chat extends React.Component {
       this.scrollToBottom();
     })
     this.connection.on('people-online', (data) => {
-      const myEmails = data.filter(e => e !== email);
+      const myEmails = data.filter(e => e !== email && !this.state.blackList.includes(e));
       this.setState({people:myEmails});
     })
     this.connection.on('status', (status) => {
@@ -115,7 +115,10 @@ class Chat extends React.Component {
         </div>
         <div className='chat-area clearfix mb-3' >
           <ChatArea messages={messages}  email={email} chatRef={this.chatRef}/>
-          <ListArea people={people} handleBlock={this.handleBlock} handleConnect={this.handleConnect}/>
+          <div className='list-area mt-3'>
+            <ListArea people={people} handleBlock={this.handleBlock} handleConnect={this.handleConnect}/>
+            <DialogsArea />
+          </div> 
         </div>
         <div className='message-area mb-3'>
           <form onSubmit={this.handleSubmit}>
