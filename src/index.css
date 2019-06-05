@@ -125,10 +125,22 @@ body {
   border: 1px solid rgb(204, 204, 203);
   border-radius: 10px;
   margin-top: 10px;
-}
-.dialogs {
   overflow-y: auto;
 }
+.dialogs {
+  padding: 5px 10px;
+  border-bottom: 1px solid  rgba(204, 204, 203, 0.5);
+  margin: 0 10px;
+  display: flex;
+  justify-content: space-between;
+}
+/* .dialogs::before {
+  content: '';
+  font-size: 7px;
+  padding: 2px 2px 0 1px;
+  background: rgb(206, 49, 28) !important;
+  margin: 5px;
+} */
 
 .list {
   color:  rgb(206, 49, 28);
@@ -140,7 +152,7 @@ body {
 
 
 .my-message {
-  width: 250px;
+  max-width: 65%;
   background: rgb(126, 210, 243);
   border: 1px solid rgb(112, 193, 224);
   border-radius: 3px;
@@ -148,7 +160,7 @@ body {
 }
 
 .message {
-  width: 250px;
+  max-width: 65%;
   background: rgb(250, 213, 238);
   border: 1px solid rgb(233, 182, 217);
   border-radius: 3px;

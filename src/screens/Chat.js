@@ -16,8 +16,10 @@ class Chat extends React.Component {
     status: '',
     isModalOpen: false,
     blackList: [],
+    dialogs: [],
+    currentDialog: {type:'global'}
   }
-  connection = window.io.connect('http://192.168.0.208:3020');
+  connection = window.io.connect('http://localhost:3020');
   chatRef = React.createRef();
   
   handleChange = (e) => {
@@ -28,11 +30,15 @@ class Chat extends React.Component {
   handleSubmit = (e) => {
     e.preventDefault();
     const {email} = this.props;
-    const {message} = this.state;
+    const {message, currentDialog} = this.state;
     if (!message) return;
     const time = new Date().toString().split(' ');
     const newTime = `${time[2]} ${time[1]} ${time[3]} ${time[4]}`;
-    const myMesage = {email, message,time: newTime};
+    let type = currentDialog.type;
+    if (currentDialog.type === 'individual') {
+      type = currentDialog.users.find(i => i !== email);
+    }
+    const myMesage = {email, message, time: newTime, currentDialog: type};
     this.setState({message:''});
     this.connection.emit('chat', myMesage);
   }
@@ -55,6 +61,9 @@ class Chat extends React.Component {
   toGlobalChat = () => {
     this.connection.emit('global');
   }
+  changeDialog = (dialog) => {
+    this.connection.emit('change-dialog', dialog);
+  }
   toBlackList = () => {
     this.toggleModal();
   }
@@ -69,10 +78,18 @@ class Chat extends React.Component {
     this.connection.emit('email', email);
 
     this.connection.on('chat', (data) => {
-      const {messages} = this.state;
-      messages.push(data);
-      this.setState({messages});
-      this.scrollToBottom();
+      const {messages, currentDialog} = this.state;
+      if (currentDialog.type === data.currentDialog){
+        messages.push(data);
+        this.setState({messages});
+        this.scrollToBottom();
+      } else {
+        if (currentDialog.type === 'individual' && currentDialog.users.includes(data.currentDialog)){
+          messages.push(data);
+          this.setState({messages});
+          this.scrollToBottom();
+        }
+      }
     })
     this.connection.on('people-online', (data) => {
       const myEmails = data.filter(e => e !== email && !this.state.blackList.includes(e));
@@ -87,6 +104,26 @@ class Chat extends React.Component {
     this.connection.on('black-list', (blackList) => {
       this.setState({blackList});
     })
+    this.connection.on('dialogs', (arr) => {
+      const dialogs = arr.map(dialog => {
+        if (dialog.type === 'individual') {
+          const user = dialog.users.find(i => i !== email);
+          return user;
+        }
+        return dialog.type;
+      })
+      this.setState({dialogs});
+    })
+    this.connection.on('messages',(messages) => {
+      if(!messages){
+        this.setState({messages:[]});
+        return;
+      }
+      this.setState({messages});
+    })
+    this.connection.on('current-dialog', (currentDialog) => {
+      this.setState({currentDialog});
+    })
     
     this.connection.on('connect', () => {
         console.log('online');
@@ -99,7 +136,7 @@ class Chat extends React.Component {
 
   render (){
     const {email} = this.props;
-    const {message, messages, people, status, isModalOpen, blackList} = this.state;
+    const {message, messages, people, status, isModalOpen, blackList, dialogs} = this.state;
     return (
       <div className='container clearfix'>
         <ModalBL isModalOpen={isModalOpen} toggle={this.toggleModal}>
@@ -117,7 +154,7 @@ class Chat extends React.Component {
           <ChatArea messages={messages}  email={email} chatRef={this.chatRef}/>
           <div className='list-area mt-3'>
             <ListArea people={people} handleBlock={this.handleBlock} handleConnect={this.handleConnect}/>
-            <DialogsArea />
+            <DialogsArea dialogs={dialogs} changeDialog={this.changeDialog}/>
           </div> 
         </div>
         <div className='message-area mb-3'>
