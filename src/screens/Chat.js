@@ -6,7 +6,9 @@ import ChatArea from '../components/ChatArea';
 import ListArea from '../components/ListArea';
 import DialogsArea from '../components/DialogsArea';
 import ModalBL from '../components/ModalBL';
+import ModalAG from '../components/ModalAG';
 import BlackList from '../components/BlackList';
+import GroupForm from '../components/GroupForm';
 
 class Chat extends React.Component {
   state = {
@@ -14,10 +16,11 @@ class Chat extends React.Component {
     messages: [],
     people: [],
     status: '',
-    isModalOpen: false,
+    isModalOpenBL: false,
+    isModalOpenAG: false,
     blackList: [],
     dialogs: [],
-    currentDialog: {type:'global'}
+    currentDialog: {type:'global'},
   }
   connection = window.io.connect('http://localhost:3020');
   chatRef = React.createRef();
@@ -54,15 +57,31 @@ class Chat extends React.Component {
   handleBlock = (i) => {
     this.connection.emit('block-user', i);
   }
-  toggleModal = ()=>{
-    const {isModalOpen} = this.state;
-    this.setState({isModalOpen: !isModalOpen});
+  toggleModalBL = ()=>{
+    const {isModalOpenBL} = this.state;
+    this.setState({isModalOpenBL: !isModalOpenBL});
+  } 
+  toggleModalAG = ()=>{
+    const {isModalOpenAG} = this.state;
+    this.setState({isModalOpenAG: !isModalOpenAG});
   } 
   changeDialog = (dialog) => {
     this.connection.emit('change-dialog', dialog);
   }
   toBlackList = () => {
-    this.toggleModal();
+    this.toggleModalBL();
+  }
+  toGroupCreator = () => {
+    this.toggleModalAG();
+  }
+  createGroup = (group) => {
+    console.log(group);
+    if (!group) {
+      this.setState({status: "Some fields are empty"});
+      return;
+    }
+    this.connection.emit('new-group', group);
+    this.toggleModalAG();
   }
   scrollToBottom() {
     this.chatRef.current.scrollTop = this.chatRef.current.scrollHeight - this.chatRef.current.clientHeight;
@@ -92,9 +111,6 @@ class Chat extends React.Component {
       const myEmails = data.filter(e => e !== email && !this.state.blackList.includes(e));
       this.setState({people:myEmails});
     })
-    this.connection.on('status', (status) => {
-      this.setState({status});
-    })
     this.connection.on('clear', () => {
       this.setState({messages:[]});
     })
@@ -114,9 +130,11 @@ class Chat extends React.Component {
     this.connection.on('messages',(messages) => {
       if(!messages){
         this.setState({messages:[]});
+        this.scrollToBottom();
         return;
       }
       this.setState({messages});
+      this.scrollToBottom();
     })
     this.connection.on('current-dialog', (currentDialog) => {
       this.setState({currentDialog});
@@ -133,15 +151,18 @@ class Chat extends React.Component {
 
   render (){
     const {email} = this.props;
-    const {message, messages, people, status, isModalOpen, blackList, dialogs} = this.state;
+    const {message, messages, people, status, isModalOpenBL, isModalOpenAG, blackList, dialogs, title} = this.state;
     return (
       <div className='container clearfix'>
-        <ModalBL isModalOpen={isModalOpen} toggle={this.toggleModal}>
+        <ModalBL isModalOpen={isModalOpenBL} toggle={this.toggleModalBL}>
           <BlackList list={blackList} restoreUser={this.restoreUser}/>
         </ModalBL>
+        <ModalAG isModalOpen={isModalOpenAG} toggle={this.toggleModalAG}>
+          <GroupForm list={people} title={title} createGroup={this.createGroup} status={status} email={email}/>
+        </ModalAG>
         <div className='clearfix'>
-          <h2 className='chat-status mt-3 mr-3'style={{float:'left'}}>{status}</h2>
           <div style={{float:'right'}} >
+            <button className='btn btn-danger mt-3 mr-3' onClick={this.toGroupCreator}>Add Group</button>
             <button className='btn btn-dark mt-3 mr-3' onClick={this.toBlackList}>Black List</button>
             <button className='btn btn-danger mt-3 mr-3' onClick={this.handleLogout}>LogOut</button>
           </div>

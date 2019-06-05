@@ -133,6 +133,10 @@ body {
   margin: 0 10px;
   display: flex;
   justify-content: space-between;
+  cursor: pointer
+}
+.dialogs:hover {
+  color: rgb(206, 49, 28);
 }
 /* .dialogs::before {
   content: '';
@@ -153,18 +157,20 @@ body {
 
 .my-message {
   max-width: 65%;
-  background: rgb(126, 210, 243);
-  border: 1px solid rgb(112, 193, 224);
+  background: #fafafa;
+  border: 1px solid #c7c7c7;
   border-radius: 3px;
   float: right;
+  padding: 1px 2px;
 }
 
 .message {
   max-width: 65%;
-  background: rgb(250, 213, 238);
-  border: 1px solid rgb(233, 182, 217);
+  background: #fafafa;
+  border: 1px solid #c7c7c7;
   border-radius: 3px;
   float: left;
+  padding: 1px 2px;
 }
 
 .user-name {
@@ -192,7 +198,7 @@ span {
   padding-bottom: 5px;
   border-bottom: 1px solid rgb(204, 204, 203);
 }
-.chat-status{
+.status{
   text-align: center;
   color: rgb(206, 49, 28);
   font-size: 20px;
