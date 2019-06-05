@@ -58,9 +58,6 @@ class Chat extends React.Component {
     const {isModalOpen} = this.state;
     this.setState({isModalOpen: !isModalOpen});
   } 
-  toGlobalChat = () => {
-    this.connection.emit('global');
-  }
   changeDialog = (dialog) => {
     this.connection.emit('change-dialog', dialog);
   }
@@ -146,7 +143,6 @@ class Chat extends React.Component {
           <h2 className='chat-status mt-3 mr-3'style={{float:'left'}}>{status}</h2>
           <div style={{float:'right'}} >
             <button className='btn btn-dark mt-3 mr-3' onClick={this.toBlackList}>Black List</button>
-            <button className='btn btn-danger mt-3 mr-3' onClick={this.toGlobalChat}>Global Chat</button>
             <button className='btn btn-danger mt-3 mr-3' onClick={this.handleLogout}>LogOut</button>
           </div>
         </div>
