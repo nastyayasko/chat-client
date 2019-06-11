@@ -8,6 +8,7 @@ import DialogsArea from '../components/DialogsArea';
 import Modal from '../components/Modal';
 import BlackList from '../components/BlackList';
 import GroupForm from '../components/GroupForm';
+import UserPhoto from '../components/UserPhoto'
 
 class Chat extends React.Component {
   state = {
@@ -142,7 +143,7 @@ class Chat extends React.Component {
   }
 
   render (){
-    const {email} = this.props;
+    const {email, img} = this.props;
     const {message, messages, people, status, isModalOpenBL, isModalOpenAG, blackList, dialogs, title} = this.state;
     return (
       <div className='container clearfix'>
@@ -169,6 +170,7 @@ class Chat extends React.Component {
         <div className='message-area mb-3'>
           <form onSubmit={this.handleSubmit}>
             <div className="form-group row mx-auto mt-3">
+              <UserPhoto img={img}/>
               <label className="col-form-label m-2">{email}</label>
               <div className="col-sm-7">
               <input type="text" onChange={this.handleChange} name = 'message' value={message} className="form-control m-2" placeholder="Message"/>
@@ -185,6 +187,7 @@ class Chat extends React.Component {
 const mapStateToProps = state => {
   return {
     email: state.user.email,
+    img: state.user.img,
   }
 }
 

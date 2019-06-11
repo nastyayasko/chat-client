@@ -209,3 +209,8 @@ span {
   font-size: 0;
   padding: 0;
 }
+.photo{
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+}
