@@ -1,2 +1,2 @@
-export const saveEmail =  (email)   => ({type:'SAVE_EMAIL', payload: email});
-export const deleteEmail =  ()   => ({type:'DELETE_EMAIL', payload: ''});
+export const saveUser =  (email)   => ({type:'SAVE_USER', payload: email});
+export const deleteUser =  ()   => ({type:'DELETE_USER'});

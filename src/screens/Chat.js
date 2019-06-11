@@ -1,12 +1,11 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {deleteEmail} from '../redux/actions'
+import {deleteUser} from '../redux/actions'
 
 import ChatArea from '../components/ChatArea';
 import ListArea from '../components/ListArea';
 import DialogsArea from '../components/DialogsArea';
-import ModalBL from '../components/ModalBL';
-import ModalAG from '../components/ModalAG';
+import Modal from '../components/Modal';
 import BlackList from '../components/BlackList';
 import GroupForm from '../components/GroupForm';
 
@@ -47,7 +46,7 @@ class Chat extends React.Component {
   }
 
   handleLogout = () => {
-    this.props.deleteEmail();
+    this.props.deleteUser();
     this.props.history.push('/');
     this.connection.disconnect();
   }
@@ -68,14 +67,7 @@ class Chat extends React.Component {
   changeDialog = (dialog) => {
     this.connection.emit('change-dialog', dialog);
   }
-  toBlackList = () => {
-    this.toggleModalBL();
-  }
-  toGroupCreator = () => {
-    this.toggleModalAG();
-  }
   createGroup = (group) => {
-    console.log(group);
     if (!group) {
       this.setState({status: "Some fields are empty"});
       return;
@@ -154,16 +146,16 @@ class Chat extends React.Component {
     const {message, messages, people, status, isModalOpenBL, isModalOpenAG, blackList, dialogs, title} = this.state;
     return (
       <div className='container clearfix'>
-        <ModalBL isModalOpen={isModalOpenBL} toggle={this.toggleModalBL}>
+        <Modal isModalOpen={isModalOpenBL} toggle={this.toggleModalBL} name='Black List'>
           <BlackList list={blackList} restoreUser={this.restoreUser}/>
-        </ModalBL>
-        <ModalAG isModalOpen={isModalOpenAG} toggle={this.toggleModalAG}>
+        </Modal>
+        <Modal isModalOpen={isModalOpenAG} toggle={this.toggleModalAG} name='Create a new group'>
           <GroupForm list={people} title={title} createGroup={this.createGroup} status={status} email={email}/>
-        </ModalAG>
+        </Modal>
         <div className='clearfix'>
           <div style={{float:'right'}} >
-            <button className='btn btn-danger mt-3 mr-3' onClick={this.toGroupCreator}>Add Group</button>
-            <button className='btn btn-dark mt-3 mr-3' onClick={this.toBlackList}>Black List</button>
+            <button className='btn btn-danger mt-3 mr-3' onClick={this.toggleModalAG}>Add Group</button>
+            <button className='btn btn-dark mt-3 mr-3' onClick={this.toggleModalBL}>Black List</button>
             <button className='btn btn-danger mt-3 mr-3' onClick={this.handleLogout}>LogOut</button>
           </div>
         </div>
@@ -192,8 +184,8 @@ class Chat extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    email: state.email,
+    email: state.user.email,
   }
 }
 
-export default connect (mapStateToProps, {deleteEmail})(Chat);
+export default connect (mapStateToProps, {deleteUser})(Chat);
