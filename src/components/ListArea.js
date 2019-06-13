@@ -7,8 +7,8 @@ class ListArea extends React.Component{
       <div className='people-online-area'>
         <div className='people-online'>
           {
-            people.map((person,i) => (
-              <div className='person m-1' key={i}>
+            people.map(person => (
+              <div className='person m-1' key={person}>
                 <div className='m-1 email'>{person}</div>
                 <div className = 'person-btns'>
                   <button className='btn btn-success' onClick={()=>handleConnect(person)}>Message</button>

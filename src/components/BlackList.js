@@ -6,9 +6,9 @@ function BlackList(props){
   return (
     <div className='black-list no-display'>
       {
-        list.map((user, i) => {
+        list.map(user => {
           return(
-            <div className='blocked-person mb-1' key={i}>
+            <div className='blocked-person mb-1' key={user}>
               <div className='m-2 email'>{user}</div>
               <button className='btn btn-success' onClick={() => {restoreUser(user)}}>Restore</button>
             </div>
