@@ -1,7 +1,8 @@
 const initialState = {
   user: {
-    email: 'test@test.com'
-  }
+    email: ''
+  },
+  connection: {}
 }
 
 
@@ -16,6 +17,16 @@ export default function reducers(state = initialState, action){
       return {
         ...state, 
         user: {},
+    };
+    case 'SAVE_CONNECTION':
+      return {
+        ...state, 
+        connection: action.payload,
+    };
+    case 'DELETE_CONNECTION':
+      return {
+        ...state, 
+        connection: {},
     };
     default:
       return state;

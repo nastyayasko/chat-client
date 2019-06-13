@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {saveUser} from '../redux/actions'
+import {saveUser, saveConnection} from '../redux/actions'
 import GoogleLogin from 'react-google-login';
 import FacebookLogin from 'react-facebook-login';
 import axios from 'axios';
@@ -39,6 +39,8 @@ class HomePage extends React.Component {
           return;
         }
         this.props.saveUser(user);
+        const connection = window.io.connect('http://localhost:3020');
+        this.props.saveConnection(connection);
         this.props.history.push('/chat');
       })
  }
@@ -49,6 +51,8 @@ class HomePage extends React.Component {
   login = (user) => {
     this.props.saveUser(user);
     this.toggleModal();
+    const connection = window.io.connect('http://localhost:3020');
+    this.props.saveConnection(connection);
     this.props.history.push('/chat');
   }
   
@@ -63,10 +67,11 @@ class HomePage extends React.Component {
     axios.post(this.state.url, data)
     .then(resp => {
       this.props.saveUser(resp.data);
-    })
-    .then(() => {
+      const connection = window.io.connect('http://localhost:3020');
+      this.props.saveConnection(connection);
       this.props.history.push('/chat');
     })
+    
   }
 
   responseFacebook = (response) => {
@@ -80,8 +85,8 @@ class HomePage extends React.Component {
     axios.post(this.state.url, data)
     .then(resp => {
       this.props.saveUser(resp.data);
-    })
-    .then(() => {
+      const connection = window.io.connect('http://localhost:3020');
+      this.props.saveConnection(connection);
       this.props.history.push('/chat');
     })
   }
@@ -135,4 +140,4 @@ class HomePage extends React.Component {
   
 }
 
-export default connect (null, {saveUser})(HomePage);
+export default connect (null, {saveUser, saveConnection})(HomePage);

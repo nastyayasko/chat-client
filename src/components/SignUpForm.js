@@ -31,16 +31,12 @@ class SignUpForm extends React.Component {
     const user = {email, firstName, lastName, password}
     axios.post(url, user)
       .then(response => {
-        console.log(response.data);
         if (response.data.client) {
           this.setState({status: "User with this email already exists."});
           return;
         }
         login(response.data);
       })
-
-    console.log('OK')
-    
   }
   render(){
     const {status} = this.state;

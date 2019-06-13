@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {deleteUser} from '../redux/actions'
+import {deleteUser, deleteConnection} from '../redux/actions';
 
 import ChatArea from '../components/ChatArea';
 import ListArea from '../components/ListArea';
@@ -21,8 +21,9 @@ class Chat extends React.Component {
     blackList: [],
     dialogs: [],
     currentDialog: {type:'global'},
+    connection:{},
   }
-  connection = window.io.connect('http://localhost:3020');
+  
   chatRef = React.createRef();
   
   handleChange = (e) => {
@@ -43,19 +44,21 @@ class Chat extends React.Component {
     }
     const myMesage = {email, message, time: newTime, currentDialog: type};
     this.setState({message:''});
-    this.connection.emit('chat', myMesage);
+    this.state.connection.emit('chat', myMesage);
   }
 
   handleLogout = () => {
     this.props.deleteUser();
+    this.state.connection.disconnect();
+    this.props.deleteConnection();
     this.props.history.push('/');
-    this.connection.disconnect();
+    
   }
   handleConnect = (i) => {
-    this.connection.emit('connect-user', i);
+    this.state.connection.emit('connect-user', i);
   }
   handleBlock = (i) => {
-    this.connection.emit('block-user', i);
+    this.state.connection.emit('block-user', i);
   }
   toggleModalBL = ()=>{
     const {isModalOpenBL} = this.state;
@@ -66,27 +69,32 @@ class Chat extends React.Component {
     this.setState({isModalOpenAG: !isModalOpenAG});
   } 
   changeDialog = (dialog) => {
-    this.connection.emit('change-dialog', dialog);
+    this.state.connection.emit('change-dialog', dialog);
   }
   createGroup = (group) => {
     if (!group) {
       this.setState({status: "Some fields are empty"});
       return;
     }
-    this.connection.emit('new-group', group);
+    this.state.connection.emit('new-group', group);
     this.toggleModalAG();
   }
   scrollToBottom() {
     this.chatRef.current.scrollTop = this.chatRef.current.scrollHeight - this.chatRef.current.clientHeight;
   }
   restoreUser = (i) => {
-    this.connection.emit('restore-user', i);
+    this.state.connection.emit('restore-user', i);
   }
   componentDidMount() {
-    const {email} = this.props;
-    this.connection.emit('email', email);
-
-    this.connection.on('chat', (data) => {
+    const {email, connection} = this.props;
+    this.setState({connection});
+    if (!email) {
+      this.props.history.push('/');
+      return;
+    }
+    connection.emit('email', email);
+    connection.emit('change-dialog', 'global');
+    connection.on('chat', (data) => {
       const {messages, currentDialog} = this.state;
       if (currentDialog.type === data.currentDialog){
         messages.push(data);
@@ -100,17 +108,17 @@ class Chat extends React.Component {
         }
       }
     })
-    this.connection.on('people-online', (data) => {
+    connection.on('people-online', (data) => {
       const myEmails = data.filter(e => e !== email && !this.state.blackList.includes(e));
       this.setState({people:myEmails});
     })
-    this.connection.on('clear', () => {
+    connection.on('clear', () => {
       this.setState({messages:[]});
     })
-    this.connection.on('black-list', (blackList) => {
+    connection.on('black-list', (blackList) => {
       this.setState({blackList});
     })
-    this.connection.on('dialogs', (arr) => {
+    connection.on('dialogs', (arr) => {
       const dialogs = arr.map(dialog => {
         if (dialog.type === 'individual') {
           const user = dialog.users.find(i => i !== email);
@@ -120,7 +128,7 @@ class Chat extends React.Component {
       })
       this.setState({dialogs});
     })
-    this.connection.on('messages',(messages) => {
+    connection.on('messages',(messages) => {
       if(!messages){
         this.setState({messages:[]});
         this.scrollToBottom();
@@ -129,22 +137,23 @@ class Chat extends React.Component {
       this.setState({messages});
       this.scrollToBottom();
     })
-    this.connection.on('current-dialog', (currentDialog) => {
+    connection.on('current-dialog', (currentDialog) => {
       this.setState({currentDialog});
     })
     
-    this.connection.on('connect', () => {
-        console.log('online');
-      });
+    connection.on('connect', () => {
+      console.log('online');
+    });
 
-    this.connection.onclose = () => {
+    connection.onclose = () => {
       console.log('offline');
     };
+    
   }
 
   render (){
     const {email, img} = this.props;
-    const {message, messages, people, status, isModalOpenBL, isModalOpenAG, blackList, dialogs, title} = this.state;
+    const {message, messages, people, status, isModalOpenBL, isModalOpenAG, blackList, dialogs, title, currentDialog} = this.state;
     return (
       <div className='container clearfix'>
         <Modal isModalOpen={isModalOpenBL} toggle={this.toggleModalBL} name='Black List'>
@@ -164,7 +173,7 @@ class Chat extends React.Component {
           <ChatArea messages={messages}  email={email} chatRef={this.chatRef}/>
           <div className='list-area mt-3'>
             <ListArea people={people} handleBlock={this.handleBlock} handleConnect={this.handleConnect}/>
-            <DialogsArea dialogs={dialogs} changeDialog={this.changeDialog}/>
+            <DialogsArea dialogs={dialogs} email={email} currentDialog={currentDialog} changeDialog={this.changeDialog}/>
           </div> 
         </div>
         <div className='message-area mb-3'>
@@ -188,7 +197,8 @@ const mapStateToProps = state => {
   return {
     email: state.user.email,
     img: state.user.img,
+    connection: state.connection,
   }
 }
 
-export default connect (mapStateToProps, {deleteUser})(Chat);
+export default connect (mapStateToProps, {deleteUser, deleteConnection})(Chat);

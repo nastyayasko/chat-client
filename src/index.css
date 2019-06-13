@@ -214,3 +214,7 @@ span {
   height: 45px;
   border-radius: 50%;
 }
+
+.currentDialog {
+  color: rgb(206, 49, 28);
+}
