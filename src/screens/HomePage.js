@@ -13,8 +13,8 @@ class HomePage extends React.Component {
   state = {
     email: '',
     password: '',
-    url: 'http://localhost:3020/api/auth',
-    loginURL: 'http://localhost:3020/api/log-in',
+    url: 'http://192.168.0.235:3020/api/auth',
+    loginURL: 'http://192.168.0.235:3020/api/log-in',
     isModalOpen: false,
     status:''
   }
@@ -23,7 +23,12 @@ class HomePage extends React.Component {
     const {name, value} = e.target;
     this.setState({[name]: value});
   }
-
+  loginSuccess = (user) => {
+    this.props.saveUser(user);
+    const localUser = JSON.stringify(user);
+    localStorage.setItem("myKey", localUser);
+    this.props.history.push('/chat');
+  }
   handleSubmit = (e) => {
     e.preventDefault();
     const {email,password, loginURL} = this.state;
@@ -38,10 +43,7 @@ class HomePage extends React.Component {
           this.setState({status: "Invalid email or password."});
           return;
         }
-        this.props.saveUser(user);
-        const connection = window.io.connect('http://localhost:3020');
-        this.props.saveConnection(connection);
-        this.props.history.push('/chat');
+        this.loginSuccess(user);
       })
  }
   toggleModal = ()=>{
@@ -49,11 +51,8 @@ class HomePage extends React.Component {
     this.setState({isModalOpen: !isModalOpen});
   } 
   login = (user) => {
-    this.props.saveUser(user);
     this.toggleModal();
-    const connection = window.io.connect('http://localhost:3020');
-    this.props.saveConnection(connection);
-    this.props.history.push('/chat');
+    this.loginSuccess(user);
   }
   
   responseGoogle = (response) => {
@@ -66,10 +65,7 @@ class HomePage extends React.Component {
     }
     axios.post(this.state.url, data)
     .then(resp => {
-      this.props.saveUser(resp.data);
-      const connection = window.io.connect('http://localhost:3020');
-      this.props.saveConnection(connection);
-      this.props.history.push('/chat');
+      this.loginSuccess(resp.data);
     })
     
   }
@@ -84,11 +80,15 @@ class HomePage extends React.Component {
     }
     axios.post(this.state.url, data)
     .then(resp => {
-      this.props.saveUser(resp.data);
-      const connection = window.io.connect('http://localhost:3020');
-      this.props.saveConnection(connection);
-      this.props.history.push('/chat');
+      this.loginSuccess(resp.data);
     })
+  }
+  componentDidMount(){
+    if (localStorage.getItem('myKey')){
+      const user = JSON.parse(localStorage.myKey);
+      this.loginSuccess(user);
+    }
+    console.log('home page')
   }
 
   render() {

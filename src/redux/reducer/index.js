@@ -2,7 +2,7 @@ const initialState = {
   user: {
     email: ''
   },
-  connection: {}
+  connection: null
 }
 
 
