@@ -3,34 +3,33 @@ import React from 'react';
 class GroupForm extends React.Component {
   state ={
     title: '',
-    people: {}
+    chosen: {}
   }
   handleChange = (e) => {
     const {name, value} = e.target;
     this.setState({[name]: value});
   }
   checkedBoxes = (e) => {
-    const {people} = this.state;
-    people[e.target.id] = e.target.checked;
-    this.setState({people});   
+    const {chosen} = this.state;
+    chosen[e.target.id] = e.target.checked;
+    this.setState({chosen});   
   }
 
   handleSubmit = () => {
-    const {email} = this.props;
-    const {title, people} = this.state;
-    if(!title || !people) return null;
+    const {user} = this.props;
+    const {title, chosen} = this.state;
     const users = [];
-    users.push(email);
-    for (var key in people) {
-      if (people[key]){
+    for (var key in chosen) {
+      if (chosen[key]){
         users.push(key);
       }
     }
-
-    return { type: title, users, messages: [] }
+    if(!title || !users.length) return null;
+    users.push(user._id);
+    return { type: title, users }
   }
   render(){
-    const {list, createGroup, status} = this.props;
+    const {people, createGroup, status} = this.props;
     const {title} = this.state;
     return (
       <form onSubmit={(e) => {
@@ -43,11 +42,11 @@ class GroupForm extends React.Component {
           <input type="text" className="form-control" placeholder="Name" onChange={this.handleChange} name = 'title' value={title}/>
           <label className='mt-2'>Choose people</label>
           {
-            list.map(user => {
+            people.map(user => {
               return (
-                <div className="form-check mt-3 mb-1" key={user}>
-                  <input className="form-check-input" type="checkbox" id={user} onChange={this.checkedBoxes}/>
-                  <label className="form-check-label">{user}</label>
+                <div className="form-check mt-3 mb-1" key={user._id}>
+                  <input className="form-check-input" type="checkbox" id={user._id} onChange={this.checkedBoxes}/>
+                  <label className="form-check-label">{user.email}</label>
                 </div>
               )
             }) 

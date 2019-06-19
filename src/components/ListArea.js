@@ -2,20 +2,21 @@ import React from 'react';
 
 class ListArea extends React.Component{
   render(){
-    const {people, handleConnect, handleBlock} = this.props; 
+    const {people, handleConnect, currentDialog, user} = this.props; 
+    let current;
+    if (currentDialog && currentDialog.type ==='individual'){
+      current = currentDialog.users.find(person => person !== user._id);
+    }
     return (
       <div className='people-online-area'>
         <div className='people-online'>
           {
-            people.map(person => (
-              <div className='person m-1' key={person}>
-                <div className='m-1 email'>{person}</div>
-                <div className = 'person-btns'>
-                  <button className='btn btn-success' onClick={()=>handleConnect(person)}>Message</button>
-                  <button className='btn btn-dark'  onClick={()=>handleBlock(person)}>Block</button>
+            people.map(person =>  (
+                <div className={ person._id === current?'person m-1 currentPerson':'person m-1'} onClick={()=>handleConnect(person._id)} key={person._id}>
+                  <div className='m-1 email'>{person.email}</div>
                 </div>
-              </div>
-            ))
+              )
+            )
           } 
         </div>
         

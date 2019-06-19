@@ -10,7 +10,7 @@ const ChatArea = ({ messages, email, chatRef }) => {
           className={`${
             message.email === email ? "my-message m-3" : "message m-3"
           }`}
-          key={message.time}
+          key={message._id}
           message={message}
         />
       );

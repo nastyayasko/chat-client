@@ -2,15 +2,17 @@ import React from 'react';
 
 class DialogsArea extends React.Component{
   render(){
-    const {dialogs, changeDialog, currentDialog, email} = this.props;
-    const current = currentDialog.type === 'individual'? currentDialog.users.find(i => i !== email):currentDialog.type;
-    
+    const {dialogs, changeDialog, currentDialog} = this.props;
+    let current;
+    if (currentDialog && currentDialog.type !=='individual'){
+      current = currentDialog.type;
+    }
     return (
       <div className='dialogs-area'>
         {
           dialogs.map(dialog => {
             return (
-              <div className={dialog === current?'dialogs currentDialog':'dialogs'} key={dialog} onClick={() =>{changeDialog(dialog)}}>{dialog}</div>
+              <div className={dialog.type === current?'dialogs currentDialog':'dialogs'} key={dialog._id} onClick={() =>{changeDialog(dialog._id)}}>{dialog.type}</div>
             )
           })
         }

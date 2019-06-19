@@ -13,8 +13,8 @@ class HomePage extends React.Component {
   state = {
     email: '',
     password: '',
-    url: 'http://192.168.0.235:3020/api/auth',
-    loginURL: 'http://192.168.0.235:3020/api/log-in',
+    url: 'http://localhost:3020/api/auth',
+    loginURL: 'http://localhost:3020/api/log-in',
     isModalOpen: false,
     status:''
   }
@@ -43,7 +43,7 @@ class HomePage extends React.Component {
           this.setState({status: "Invalid email or password."});
           return;
         }
-        this.loginSuccess(user);
+        this.loginSuccess(response.data);
       })
  }
   toggleModal = ()=>{
@@ -88,7 +88,6 @@ class HomePage extends React.Component {
       const user = JSON.parse(localStorage.myKey);
       this.loginSuccess(user);
     }
-    console.log('home page')
   }
 
   render() {
@@ -99,9 +98,9 @@ class HomePage extends React.Component {
         <Modal isModalOpen={isModalOpen} toggle={this.toggleModal} name='Sign Up'>
           <SignUpForm login={this.login}/>
         </Modal>
-        <h1 className="welcome-head">Welcom To Our Chat</h1>
+        {/* <h1 className="welcome-head">Welcom To Our Chat</h1> */}
         <div className="my-container">
-          <div id='auth'>
+          <div id='auth'className="mt-5">
             <form className="login-form pt-4" onSubmit={this.handleSubmit}>
               <div className='status'>{status}</div>
               <div className="form-group col-md-8">
