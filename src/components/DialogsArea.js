@@ -4,20 +4,18 @@ class DialogsArea extends React.Component{
   render(){
     const {dialogs, changeDialog, currentDialog} = this.props;
     let current;
-    if (currentDialog && currentDialog.type !=='individual'){
-      current = currentDialog.type;
+    if (currentDialog && currentDialog.type ==='group'){
+      current = currentDialog.title;
     }
     return (
       <div className='dialogs-area'>
         {
           dialogs.map(dialog => {
             return (
-              <div className={dialog.type === current?'dialogs currentDialog':'dialogs'} key={dialog._id} onClick={() =>{changeDialog(dialog._id)}}>{dialog.type}</div>
+              <div className={dialog.title === current?'dialogs currentDialog':'dialogs'} key={dialog._id} onClick={() =>{changeDialog(dialog._id)}}>{dialog.title}</div>
             )
           })
         }
-        
-        
       </div>
     )
   }

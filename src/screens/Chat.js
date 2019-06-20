@@ -26,10 +26,10 @@ class Chat extends React.Component {
   
   chatRef = React.createRef();
   
-  toConnect = () => {
+  toConnect = (user) => {
     this.connection = window.io.connect('http://localhost:3020', {reconnection:false});
     this.props.saveConnection(this.connection);
-    this.connection.emit('change-dialog', 'global');
+    this.connection.emit('user', user);
   }
   
   handleChange = (e) => {
@@ -88,15 +88,15 @@ class Chat extends React.Component {
     if (localStorage.getItem('myKey')){
       const user = JSON.parse(localStorage.myKey);
       this.props.saveUser(user);
-      this.toConnect();
+      this.toConnect(user);
     } else {
       this.props.history.push('/');
       return;
     }
-    const {email} = this.props;
-    axios('http://localhost:3020/api/users')
-      .then(resp => {
-        const people = resp.data.filter(user => user.email !== email);
+    axios('http://localhost:3020/api/all-users')
+    .then(resp => {
+        const {user} = this.props;
+        const people = resp.data.filter(person => person._id !== user._id);
         this.setState({people});
       })
       .catch(err => {throw err;})
@@ -104,7 +104,7 @@ class Chat extends React.Component {
     
     this.connection.on('chat', (data) => {
       const {messages, currentDialog} = this.state;
-      if (currentDialog._id === data.currentDialog){
+      if (currentDialog && currentDialog._id === data.currentDialog){
         messages.push(data);
         this.setState({messages});
         this.scrollToBottom();

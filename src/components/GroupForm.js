@@ -26,7 +26,7 @@ class GroupForm extends React.Component {
     }
     if(!title || !users.length) return null;
     users.push(user._id);
-    return { type: title, users }
+    return { type:'group', title, users }
   }
   render(){
     const {people, createGroup, status} = this.props;

@@ -92,7 +92,7 @@ body {
 
 .chat-window {
   float: left;
-  width: 70%;
+  width: 65%;
   height: 450px;
   overflow: auto;
   margin: 0 auto;
@@ -103,7 +103,7 @@ body {
 
 .list-area {
   float: right;
-  width: 25%;
+  width: 30%;
   height: 450px;
   margin: 0 auto;
   
@@ -198,6 +198,7 @@ span {
   padding-bottom: 5px;
   border-bottom: 1px solid rgb(204, 204, 203);
   cursor: pointer;
+  display: flex;
 }
 .person:hover {
   color: rgb(206, 49, 28);
@@ -221,6 +222,11 @@ span {
 .photo{
   width: 45px;
   height: 45px;
+  border-radius: 50%;
+}
+.photo-m{
+  width: 35px;
+  height: 35px;
   border-radius: 50%;
 }
 
