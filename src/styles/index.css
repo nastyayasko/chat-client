@@ -13,7 +13,7 @@ body {
 }
 
 .my-container {
-  max-width: 850px;
+  max-width: 1150px;
   max-height: 90%;
   margin: 0 auto;
   font-family: Arial, Helvetica, sans-serif;
@@ -79,7 +79,7 @@ body {
   justify-content: space-between;
 }
 .dialogs:hover {
-  color: #4694ff;
+  color: #60bfff;
 }
 .dialog{
   display:flex;
@@ -102,7 +102,7 @@ body {
   max-width: 80%;
   border-radius: 8px 8px 8px 0;
   padding: 1px 2px;
-  margin: 3px 0;
+  margin: 3px;
   float: left;
   background-color: #f7f7f7 !important;
 }
@@ -136,16 +136,15 @@ span {
   display: flex;
 }
 .person:hover {
-  color: #4694ff;
+  color: #60bfff;
 }
 .status{
   text-align: center;
-  color: #4694ff;
+  color: #60bfff;
   font-size: 20px;
 }
 .status-chat{
-  float: left;
-  color: #4694ff;
+  color: #60bfff;
   font-size: 20px;
 }
 
@@ -161,5 +160,25 @@ span {
 }
 
 .currentPerson {
-  color: #4694ff;
+  color: #60bfff;
+}
+
+
+*::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+*::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}
+
+/* Handle */
+*::-webkit-scrollbar-thumb {
+  background: #60bfff; 
+}
+
+/* Handle on hover */
+*::-webkit-scrollbar-thumb:hover {
+  background: #60bfff; 
 }

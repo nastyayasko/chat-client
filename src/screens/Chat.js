@@ -20,13 +20,13 @@ class Chat extends React.Component {
     isModalOpenAG: false,
     dialogs: [],
     currentDialog: null,
-    dialogName: ''
+    dialogName: 'WELCOME!'
   }
   
   chatRef = React.createRef();
   
   toConnect = (user) => {
-    this.connection = window.io.connect('http://localhost:3020', {reconnection:false});
+    this.connection = window.io.connect('http://192.168.0.154:3020', {reconnection:false});
     this.props.saveConnection(this.connection);
     this.connection.emit('user', user);
   }
@@ -87,6 +87,15 @@ class Chat extends React.Component {
   scrollToBottom() {
     this.chatRef.current.scrollTop = this.chatRef.current.scrollHeight - this.chatRef.current.clientHeight;
   }
+  getUsers = () => {
+    axios('http://192.168.0.154:3020/api/all-users')
+    .then(resp => {
+        const {user} = this.props;
+        const people = resp.data.filter(person => person._id !== user._id);
+        this.setState({people});
+      })
+      .catch(err => {throw err;})
+  }
   componentDidMount() {
     if (localStorage.getItem('myKey')){
       const user = JSON.parse(localStorage.myKey);
@@ -96,14 +105,7 @@ class Chat extends React.Component {
       this.props.history.push('/');
       return;
     }
-    axios('http://localhost:3020/api/all-users')
-    .then(resp => {
-        const {user} = this.props;
-        const people = resp.data.filter(person => person._id !== user._id);
-        this.setState({people});
-      })
-      .catch(err => {throw err;})
-    
+    this.getUsers();
     
     this.connection.on('chat', (data) => {
       const {messages, currentDialog} = this.state;
@@ -119,9 +121,7 @@ class Chat extends React.Component {
       this.setState({dialogs});
     })
     this.connection.on('all-users', (users) => {
-      const {user} = this.props;
-      const people = users.filter(person => person._id !== user._id);
-      this.setState({people});
+      this.getUsers();
     })
     this.connection.on('messages',(messages) => {
       this.setState({messages});
@@ -163,9 +163,9 @@ class Chat extends React.Component {
           </div>
 
           <div className='list-area'>
-            <div className='list-name'>Friends & Dialogs</div>
+            <div className='list-name'>Friends</div>
             <ListArea people={people} currentDialog={currentDialog} user={user} handleConnect={this.handleConnect}/>
-            <DialogsArea dialogs={dialogs} email={email} currentDialog={currentDialog} changeDialog={this.changeDialog}/>
+            
           </div>
 
           <div className='messages'>
@@ -173,12 +173,15 @@ class Chat extends React.Component {
             <ChatArea messages={messages}  email={email} chatRef={this.chatRef}/>
             <div className='message-area'>
               <form onSubmit={this.handleSubmit} className='message-form'>
-                <input type="text" onChange={this.handleChange} name = 'message' value={message} className="input-message" placeholder="Message"/>
+                <input type="text" autoFocus onChange={this.handleChange} name = 'message' value={message} className="input-message" placeholder="Message"/>
                 <button className='send-message'><i className="fas fa-paper-plane"></i></button>
               </form>
             </div>
           </div>
-          
+          <div className='list-area'>
+            <div className='list-name'>Dialogs</div>
+            <DialogsArea dialogs={dialogs} email={email} currentDialog={currentDialog} changeDialog={this.changeDialog}/>
+          </div>
         </div>
 
         

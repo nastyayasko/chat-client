@@ -14,8 +14,8 @@ class HomePage extends React.Component {
   state = {
     email: '',
     password: '',
-    url: 'http://localhost:3020/api/auth',
-    loginURL: 'http://localhost:3020/api/log-in',
+    url: 'http://192.168.0.154:3020/api/auth',
+    loginURL: 'http://192.168.0.154:3020/api/log-in',
     isModalOpen: false,
     status:''
   }

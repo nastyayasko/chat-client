@@ -1,10 +1,12 @@
 .chat-area{
   display: flex;
-  max-height: 90vh;
+  height: 95vh;
+  border: 1px solid rgb(204, 204, 203);
+  border-top: none;
 }
 
 .sidebar {
-  height: 550px;
+  /* height: 550px; */
   width: 10%;
   background-color: #fdfdfd !important;
 }
@@ -28,12 +30,12 @@
   cursor: pointer;
 }
 .fas:hover{
-  color: #4694ff;
+  color: #60bfff;
 }
 
 .list-area {
-  width: 30%;
-  height: 550px;
+  width: 20%;
+  /* height: 550px; */
   margin: 0 auto;
 }
 
@@ -49,13 +51,12 @@
 }
 
 .people-online-area {
-  height: 45%;
-  border-bottom: 1px solid rgb(204, 204, 203);
+  height: 90%;
   overflow-y: auto;
 }
 
 .dialogs-area {
-  height: 45%;
+  height:90%;
   overflow-y: auto;
 }
 
@@ -64,8 +65,8 @@
 
 
 .messages{
-  height: 550px;
-  width: 60%;
+  /* height: 550px; */
+  width: 50%;
   background-color: #fdfdfd !important;
 }
 .dialog-name {
@@ -105,7 +106,7 @@
 }
 
 .input-message {
-  width: 90%;
+  width: 85%;
   margin-right: 10px;
   height: calc(1.5em + .75rem + 2px);
   padding: .375rem .75rem;
