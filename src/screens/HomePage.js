@@ -109,7 +109,7 @@ class HomePage extends React.Component {
                 <input type='email' className='my-input mb-2' placeholder='email' value={email} name='email' onChange={this.handleChange}/>
                 <label className='label mt-3'>Password</label>
                 <input type='password' className='my-input mb-2' placeholder='password' value={password} name='password' onChange={this.handleChange}/>
-                <button type='submite' className='login-btn mt-4'>LOGIN</button>
+                <button type='submite' className='login-btn mt-4'>Login</button>
               </div>
             </form>
             <div className='sign-up' onClick={this.toggleModal}>Don't have an account? Sign up</div>
