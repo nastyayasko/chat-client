@@ -2,6 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import axios from 'axios';
 import {saveUser, saveConnection, deleteUser, deleteConnection} from '../redux/actions';
+import '../styles/Chat.css';
 
 import ChatArea from '../components/ChatArea';
 import ListArea from '../components/ListArea';
@@ -16,12 +17,10 @@ class Chat extends React.Component {
     messages: [],
     people: [],
     status: '',
-    isModalOpenBL: false,
     isModalOpenAG: false,
-    blackList: [],
     dialogs: [],
     currentDialog: null,
-    connection: null,
+    dialogName: ''
   }
   
   chatRef = React.createRef();
@@ -62,8 +61,10 @@ class Chat extends React.Component {
     
   }
   handleConnect = (i) => {
+    const {people} = this.state;
+    const person = people.find(user => user._id === i);
     this.connection.emit('connect-user', i);
-    this.setState({status:''});
+    this.setState({status:'', dialogName: `${person.firstName} ${person.lastName}`});
   }
   toggleModalAG = ()=>{
     const {isModalOpenAG} = this.state;
@@ -71,7 +72,9 @@ class Chat extends React.Component {
   } 
   changeDialog = (id) => {
     this.connection.emit('change-dialog', id);
-    this.setState({status:''});
+    const {dialogs} = this.state;
+    const dialog = dialogs.find(d => d._id === id);
+    this.setState({status:'', dialogName: dialog.title});
   }
   createGroup = (group) => {
     if (!group) {
@@ -112,7 +115,13 @@ class Chat extends React.Component {
     })
     
     this.connection.on('dialogs', (dialogs) => {
+      console.log(dialogs);
       this.setState({dialogs});
+    })
+    this.connection.on('all-users', (users) => {
+      const {user} = this.props;
+      const people = users.filter(person => person._id !== user._id);
+      this.setState({people});
     })
     this.connection.on('messages',(messages) => {
       this.setState({messages});
@@ -137,38 +146,42 @@ class Chat extends React.Component {
 
   render (){
     const {email, img, user} = this.props;
-    const {message, messages, people, status, isModalOpenAG, dialogs, title, currentDialog} = this.state;
+    const {message, messages, people, status, isModalOpenAG, dialogs, title, currentDialog, dialogName} = this.state;
     return (
-      <div className='container clearfix'>
+      <div className='my-container clearfix'>
         <Modal isModalOpen={isModalOpenAG} toggle={this.toggleModalAG} name='Create a new group'>
           <GroupForm people={people} user={user} title={title} createGroup={this.createGroup} status={status} email={email}/>
         </Modal>
-        <div className='clearfix'>
-          <div className='status-chat mt-3'>{status}</div>
-          <div style={{float:'right'}} >
-            <button className='btn btn-danger mt-3 mr-3' onClick={this.toggleModalAG}>Add Group</button>
-            <button className='btn btn-danger mt-3 mr-3' onClick={this.handleLogout}>LogOut</button>
+        
+            
+        
+        <div className='chat-area' >
+          <div className='sidebar'>
+            <UserPhoto img={img}/>
+            <i className="fas fa-comment-medical" onClick={this.toggleModalAG}></i>
+            <i className="fas fa-power-off" onClick={this.handleLogout}></i>
           </div>
-        </div>
-        <div className='chat-area clearfix mb-3' >
-          <ChatArea messages={messages}  email={email} chatRef={this.chatRef}/>
-          <div className='list-area mt-3'>
+
+          <div className='list-area'>
+            <div className='list-name'>Friends & Dialogs</div>
             <ListArea people={people} currentDialog={currentDialog} user={user} handleConnect={this.handleConnect}/>
             <DialogsArea dialogs={dialogs} email={email} currentDialog={currentDialog} changeDialog={this.changeDialog}/>
-          </div> 
-        </div>
-        <div className='message-area mb-3'>
-          <form onSubmit={this.handleSubmit}>
-            <div className="form-group row mx-auto mt-3">
-              <UserPhoto img={img}/>
-              <label className="col-form-label m-2">{email}</label>
-              <div className="col-sm-7">
-              <input type="text" onChange={this.handleChange} name = 'message' value={message} className="form-control m-2" placeholder="Message"/>
-              </div>
-              <button type="submit" className="btn btn-danger m-2">Send</button>
+          </div>
+
+          <div className='messages'>
+            <div className='dialog-name'>{dialogName}<div className='status-chat mt-3'>{status}</div></div>
+            <ChatArea messages={messages}  email={email} chatRef={this.chatRef}/>
+            <div className='message-area'>
+              <form onSubmit={this.handleSubmit} className='message-form'>
+                <input type="text" onChange={this.handleChange} name = 'message' value={message} className="input-message" placeholder="Message"/>
+                <button className='send-message'><i className="fas fa-paper-plane"></i></button>
+              </form>
             </div>
-          </form>
+          </div>
+          
         </div>
+
+        
       </div>
     )
   }

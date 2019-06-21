@@ -1,0 +1,165 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  
+}
+body {
+  background-color: #f7f7f7 !important;
+  font-size: 12px !important;
+}
+.btn {
+  font-size: 13px !important;
+}
+
+.my-container {
+  max-width: 850px;
+  max-height: 90%;
+  margin: 0 auto;
+  font-family: Arial, Helvetica, sans-serif;
+  
+}
+.welcome-head {
+  padding: 30px;
+  text-align: center;
+  color: white;
+  font-size: 55px;
+}
+
+.clearfix:after {
+  content: '';
+  display: table;
+  clear: both;
+}
+
+/* .g-signin2 {
+  padding: 20px 60px;
+  opacity: 0;
+  position: absolute;
+  left: 0;
+  top: 0;
+} */
+
+
+
+.btn-creater{
+  color: #fff;
+  margin:  auto;
+  margin-top: 15px;
+  background-color: #4694ff;
+  display: block;
+  font-weight: 400;
+  text-align: center;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  border: 1px solid #4694ff;
+  padding: .375rem .75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  border-radius: .25rem;
+  transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+
+
+
+
+
+
+.people-online {
+  margin: 0 5%;
+  
+}
+
+.dialogs {
+  padding: 5px 10px;
+  margin: 0 10px;
+  display: flex;
+  justify-content: space-between;
+}
+.dialogs:hover {
+  color: #4694ff;
+}
+.dialog{
+  display:flex;
+  border-bottom: 1px solid  rgba(204, 204, 203, 0.5);
+  margin:0 5%;
+  padding: 3px 0;
+  cursor: pointer
+}
+
+.list {
+  color:  rgb(206, 49, 28);
+  padding-bottom: 3px;
+  border-bottom: 1px solid  rgba(204, 204, 203, 0.5);
+  text-align: center;
+  font-size: 22px;
+}
+
+
+.message {
+  max-width: 80%;
+  border-radius: 8px 8px 8px 0;
+  padding: 1px 2px;
+  margin: 3px 0;
+  float: left;
+  background-color: #f7f7f7 !important;
+}
+.my-message {
+  float: right;
+  border-radius: 8px 8px 0 8px;
+}
+.user-name {
+  font-weight: bold;
+}
+
+span {
+  font-weight: normal;
+  font-style: italic;
+  font-size: 12px;
+}
+
+
+.person-btns{
+  display: flex;
+  justify-content: space-around;
+}
+ .blocked-person {
+  display: flex;
+  justify-content: space-around;
+ }
+.person {
+  padding-bottom: 5px;
+  border-bottom: 1px solid rgb(204, 204, 203);
+  cursor: pointer;
+  display: flex;
+}
+.person:hover {
+  color: #4694ff;
+}
+.status{
+  text-align: center;
+  color: #4694ff;
+  font-size: 20px;
+}
+.status-chat{
+  float: left;
+  color: #4694ff;
+  font-size: 20px;
+}
+
+
+.photo-m{
+  max-width: 35px;
+  max-height: 35px;
+  border-radius: 50%;
+}
+
+.currentDialog {
+  color: #4694ff;
+}
+
+.currentPerson {
+  color: #4694ff;
+}

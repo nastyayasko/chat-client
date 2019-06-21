@@ -1,0 +1,122 @@
+.chat-area{
+  display: flex;
+  max-height: 90vh;
+}
+
+.sidebar {
+  height: 550px;
+  width: 10%;
+  background-color: #fdfdfd !important;
+}
+.user-photo{
+  height: 10%;
+  margin: 0 10%;
+  text-align: center;
+  border-bottom: 1px solid rgb(204, 204, 203);
+}
+.photo{
+  max-width: 43px;
+  max-height: 43px;
+  border-radius: 50%;
+}
+.fa-comment-medical, .fa-power-off{
+  color: #ececec;
+  display: block;
+  text-align: center;
+  margin: 20% 0;
+  font-size: 50px;
+  cursor: pointer;
+}
+.fas:hover{
+  color: #4694ff;
+}
+
+.list-area {
+  width: 30%;
+  height: 550px;
+  margin: 0 auto;
+}
+
+.list-name{
+  height: 10%;
+  margin: 0 5%;
+  border-bottom: 1px solid rgb(204, 204, 203);
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  padding: 10px 0;
+  color: rgb(204, 204, 203);
+}
+
+.people-online-area {
+  height: 45%;
+  border-bottom: 1px solid rgb(204, 204, 203);
+  overflow-y: auto;
+}
+
+.dialogs-area {
+  height: 45%;
+  overflow-y: auto;
+}
+
+
+
+
+
+.messages{
+  height: 550px;
+  width: 60%;
+  background-color: #fdfdfd !important;
+}
+.dialog-name {
+  height: 10%;
+  margin: 0 5%;
+  border-bottom: 1px solid rgb(204, 204, 203);
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  padding: 10px 0;
+  color: rgb(204, 204, 203);
+}
+
+.chat-window {
+  height: 80%;
+  overflow: auto;
+  margin: 0 5%;
+}
+
+.message-area {
+  height: 10%;
+  margin: 0 5%;
+  border-top: 1px solid rgb(204, 204, 203);
+}
+.message-form{
+  padding: 1%;
+}
+.send-message{
+  border: none;
+  background: none;
+}
+.fa-paper-plane{
+  font-size: 33px;
+  color: #ececec;
+  cursor: pointer;
+  text-align: center;
+}
+
+.input-message {
+  width: 90%;
+  margin-right: 10px;
+  height: calc(1.5em + .75rem + 2px);
+  padding: .375rem .75rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #495057;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  border-radius: .25rem;
+  transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+

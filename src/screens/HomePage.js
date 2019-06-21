@@ -4,6 +4,7 @@ import {saveUser, saveConnection} from '../redux/actions'
 import GoogleLogin from 'react-google-login';
 import FacebookLogin from 'react-facebook-login';
 import axios from 'axios';
+import '../styles/HomePage.css';
 
 import Modal from '../components/Modal';
 import SignUpForm from '../components/SignUpForm';
@@ -21,7 +22,7 @@ class HomePage extends React.Component {
 
   handleChange = (e) => {
     const {name, value} = e.target;
-    this.setState({[name]: value});
+    this.setState({[name]: value, status:''});
   }
   loginSuccess = (user) => {
     this.props.saveUser(user);
@@ -98,38 +99,39 @@ class HomePage extends React.Component {
         <Modal isModalOpen={isModalOpen} toggle={this.toggleModal} name='Sign Up'>
           <SignUpForm login={this.login}/>
         </Modal>
-        {/* <h1 className="welcome-head">Welcom To Our Chat</h1> */}
         <div className="my-container">
           <div id='auth'className="mt-5">
+            <div className='login pt-5'>LOGIN</div>
             <form className="login-form pt-4" onSubmit={this.handleSubmit}>
               <div className='status'>{status}</div>
-              <div className="form-group col-md-8">
-                <input type='email' className='form-control m-2' placeholder='email' value={email} name='email' onChange={this.handleChange}/>
-                <input type='password' className='form-control m-2' placeholder='password' value={password} name='password' onChange={this.handleChange}/>
-                <button type='submite' className='btn btn-danger m-2'>Sign In</button>
+              <div className="form-group">
+                <label className='label'>Email</label>
+                <input type='email' className='my-input mb-2' placeholder='email' value={email} name='email' onChange={this.handleChange}/>
+                <label className='label mt-3'>Password</label>
+                <input type='password' className='my-input mb-2' placeholder='password' value={password} name='password' onChange={this.handleChange}/>
+                <button type='submite' className='login-btn mt-4'>LOGIN</button>
               </div>
             </form>
-            <div>- or -</div>
-            <button className='btn btn-primary m-2 mt-3' onClick={this.toggleModal}>Sign Up</button>
-            <div className='sign-in'>or Sign in with:</div>
-            <div className='buttons'>
+            <div className='sign-up' onClick={this.toggleModal}>Don't have an account? Sign up</div>
+            <div className='login-buttons'>
               <GoogleLogin
               clientId="191604032064-8keqk7pfclokcoc6n4un67cmpm49agn1.apps.googleusercontent.com"
               render={renderProps => (
-                <div className='google' onClick={renderProps.onClick} disabled={renderProps.disabled}><i className="fab fa-google"></i></div>
+                <div className='google mb-3' onClick={renderProps.onClick} disabled={renderProps.disabled}><i className="fab fa-google"></i>Login with Google</div>
               )}
               buttonText="Login"
               onSuccess={this.responseGoogle}
               onFailure={this.responseGoogle}
               cookiePolicy={'single_host_origin'} />
-            
-              <FacebookLogin
+              <div className='fb-cover'>
+                <FacebookLogin
               appId="385892928702080"
               autoLoad={false}
               fields="name,email,picture"
               callback={this.responseFacebook} 
               cssClass="facebook"
               icon={<div className='facebook' ><i className="fab fa-facebook-f"></i></div>} />
+              </div>
             </div>
           </div>
         </div>

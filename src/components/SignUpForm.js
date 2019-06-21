@@ -57,7 +57,7 @@ class SignUpForm extends React.Component {
             <label className="form-check-label">I'm not a robot!</label>
           </div>
         </div>
-        <button className='btn btn-danger' type='submit'>Sign up</button>
+        <button className='btn-creater' type='submit'>Sign up</button>
       </form>
     )
   }

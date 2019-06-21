@@ -3,7 +3,8 @@ import React from 'react';
 class GroupForm extends React.Component {
   state ={
     title: '',
-    chosen: {}
+    chosen: {},
+    img: 'https://www.applozic.com/resources/lib/advanced/css/app/images/mck-icon-group.png'
   }
   handleChange = (e) => {
     const {name, value} = e.target;
@@ -17,7 +18,7 @@ class GroupForm extends React.Component {
 
   handleSubmit = () => {
     const {user} = this.props;
-    const {title, chosen} = this.state;
+    const {title, chosen, img} = this.state;
     const users = [];
     for (var key in chosen) {
       if (chosen[key]){
@@ -26,17 +27,16 @@ class GroupForm extends React.Component {
     }
     if(!title || !users.length) return null;
     users.push(user._id);
-    return { type:'group', title, users }
+    return { type:'group', title, users, img }
   }
   render(){
     const {people, createGroup, status} = this.props;
     const {title} = this.state;
     return (
-      <form onSubmit={(e) => {
-        e.preventDefault();
+      <form onSubmit={(e) => {e.preventDefault();
         createGroup(this.handleSubmit())
         }}>
-          <div className='status'>{status}</div>
+        <div className='status'>{status}</div>
         <div className="form-group">
           <label >Group name</label>
           <input type="text" className="form-control" placeholder="Name" onChange={this.handleChange} name = 'title' value={title}/>
@@ -52,7 +52,7 @@ class GroupForm extends React.Component {
             }) 
           }
         </div>
-        <button className='btn btn-danger' type='submit'>Create</button>
+        <button className='btn-creater'>Create</button>
       </form>
     )
   }

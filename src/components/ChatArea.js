@@ -3,12 +3,12 @@ import Message from './Message';
 
 const ChatArea = ({ messages, email, chatRef }) => {
   
-  return (<div className="chat-window clearfix mt-3" ref = {chatRef}>
+  return (<div className="chat-window clearfix" ref = {chatRef}>
     {messages.map(message => {
       return (
         <Message
           className={`${
-            message.email === email ? "my-message m-3" : "message m-3"
+            message.email === email ? "my-message message" : "message"
           }`}
           key={message._id}
           message={message}

@@ -1,11 +1,13 @@
 import React from 'react';
 
 function UserPhoto (props) {
-  const {img} = props;
-  if (!img) return null;
+  let {img} = props;
+  if (!img) {
+    img = 'https://www.achievesuccesstutoring.com/wp-content/uploads/2019/05/no-photo-icon-22.jpg.png';
+  };
   return (
-    <div>
-      <img className='photo ml-3' src={img} alt='faces'></img>
+    <div className='user-photo'>
+      <img className='photo m-1' src={img} alt='user-pic'></img>
     </div>
   )
 }

@@ -15,9 +15,9 @@ class ListArea extends React.Component{
             people.map(person =>  (
                 <div className={ person._id === current?'person m-1 currentPerson':'person m-1'} onClick={()=>handleConnect(person._id)} key={person._id}>
                   <div>
-                    <img className='photo-m' src={person.img?person.img:photo} alt='faces'></img>
+                    <img className='photo-m mr-1' src={person.img?person.img:photo} alt='faces'></img>
                   </div>
-                  <div className='m-1 email'>{person.email}</div>
+                  <div className='m-1 email'>{person.firstName} {person.lastName}</div>
                 </div>
               )
             )
