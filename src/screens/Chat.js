@@ -4,12 +4,12 @@ import axios from 'axios';
 import {saveUser, saveConnection, deleteUser, deleteConnection} from '../redux/actions';
 import '../styles/Chat.css';
 
-import ChatArea from '../components/ChatArea';
-import ListArea from '../components/ListArea';
-import DialogsArea from '../components/DialogsArea';
+import Sidebar from '../components/Sidebar'
+import FriendsList from '../components/FriendsList';
+import MessageArea from '../components/MessageArea';
+import DialogsList from '../components/DialogsList';
 import Modal from '../components/Modal';
 import GroupForm from '../components/GroupForm';
-import UserPhoto from '../components/UserPhoto'
 
 class Chat extends React.Component {
   state = {
@@ -96,9 +96,17 @@ class Chat extends React.Component {
       })
       .catch(err => {throw err;})
   }
+  getDialogs = (id) => {
+    axios(`http://localhost:3020/api/dialogs/${id}`)
+    .then(resp => {
+      this.setState({dialogs:resp.data});
+      })
+    .catch(err => {throw err;})
+  }
   componentDidMount() {
+    let user;
     if (localStorage.getItem('myKey')){
-      const user = JSON.parse(localStorage.myKey);
+      user = JSON.parse(localStorage.myKey);
       this.props.saveUser(user);
       this.toConnect(user);
     } else {
@@ -106,6 +114,7 @@ class Chat extends React.Component {
       return;
     }
     this.getUsers();
+    this.getDialogs(user._id);
     
     this.connection.on('chat', (data) => {
       const {messages, currentDialog} = this.state;
@@ -116,11 +125,11 @@ class Chat extends React.Component {
       }
     })
     
-    this.connection.on('dialogs', (dialogs) => {
-      console.log(dialogs);
-      this.setState({dialogs});
+    this.connection.on('dialogs', () => {
+      const {user} = this.props;
+      this.getDialogs(user._id);
     })
-    this.connection.on('all-users', (users) => {
+    this.connection.on('all-users', () => {
       this.getUsers();
     })
     this.connection.on('messages',(messages) => {
@@ -137,7 +146,7 @@ class Chat extends React.Component {
   }
 
   render (){
-    const {email, img, user} = this.props;
+    const {email, user} = this.props;
     const {message, messages, people, status, isModalOpenAG, dialogs, title, currentDialog, dialogName} = this.state;
     return (
       <div className='my-container clearfix'>
@@ -146,33 +155,12 @@ class Chat extends React.Component {
         </Modal>
         
         <div className='chat-area' >
-          <div className='sidebar'>
-            <UserPhoto img={img}/>
-            <i className="fas fa-comment-medical" onClick={this.toggleModalAG}></i>
-            <i className="fas fa-power-off" onClick={this.handleLogout}></i>
-          </div>
-
-          <div className='list-area'>
-            <div className='list-name'>Friends</div>
-            <ListArea people={people} currentDialog={currentDialog} user={user} handleConnect={this.handleConnect}/>
-          </div>
-
-          <div className='messages'>
-            <div className='dialog-name'>{dialogName}<div className='status-chat mt-3'>{status}</div></div>
-            <ChatArea messages={messages}  email={email} chatRef={this.chatRef}/>
-            <div className='message-area'>
-              <form onSubmit={this.handleSubmit} className='message-form'>
-                <input type="text" autoFocus onChange={this.handleChange} name = 'message' value={message} className="input-message" placeholder="Message"/>
-                <button className='send-message'><i className="fas fa-paper-plane"></i></button>
-              </form>
-            </div>
-          </div>
-          <div className='list-area'>
-            <div className='list-name'>Dialogs</div>
-            <DialogsArea dialogs={dialogs} email={email} currentDialog={currentDialog} changeDialog={this.changeDialog}/>
-          </div>
+          <Sidebar img={user.img} toggleModalAG={this.toggleModalAG} handleLogout={this.handleLogout}/>
+          <FriendsList people={people} currentDialog={currentDialog} user={user} handleConnect={this.handleConnect}/>
+          <MessageArea dialogName={dialogName} messages={messages} email={email} status={status} chatRef={this.chatRef} 
+            handleSubmit={this.handleSubmit} handleChange={this.handleChange} message={message}/>
+          <DialogsList dialogs={dialogs} email={email} currentDialog={currentDialog} changeDialog={this.changeDialog}/>
         </div>
-
       </div>
     )
   }
@@ -182,7 +170,6 @@ const mapStateToProps = state => {
   return {
     user: state.user,
     email: state.user.email,
-    img: state.user.img,
     connection: state.connection,
   }
 }
