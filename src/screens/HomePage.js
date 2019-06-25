@@ -47,7 +47,7 @@ class HomePage extends React.Component {
         }
         this.loginSuccess(response.data);
       })
- }
+  }
   toggleModal = ()=>{
     const {isModalOpen} = this.state;
     this.setState({isModalOpen: !isModalOpen});
