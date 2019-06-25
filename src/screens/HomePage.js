@@ -1,21 +1,22 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {saveUser, saveConnection} from '../redux/actions'
-import GoogleLogin from 'react-google-login';
-import FacebookLogin from 'react-facebook-login';
+
 import axios from 'axios';
 import '../styles/HomePage.css';
 
 import Modal from '../components/Modal';
 import SignUpForm from '../components/SignUpForm';
+import GoogleLoginBtn from '../components/GoogleLoginBtn';
+import FacebookLoginBtn from '../components/FacebookLoginBtn';
 
 
 class HomePage extends React.Component {
   state = {
     email: '',
     password: '',
-    url: 'http://192.168.0.154:3020/api/auth',
-    loginURL: 'http://192.168.0.154:3020/api/log-in',
+    url: 'http://localhost:3020/api/auth',
+    loginURL: 'http://localhost:3020/api/log-in',
     isModalOpen: false,
     status:''
   }
@@ -112,25 +113,13 @@ class HomePage extends React.Component {
                 <button type='submite' className='login-btn mt-4'>Login</button>
               </div>
             </form>
+            
             <div className='sign-up' onClick={this.toggleModal}>Don't have an account? Sign up</div>
+            
             <div className='login-buttons'>
-              <GoogleLogin
-              clientId="191604032064-8keqk7pfclokcoc6n4un67cmpm49agn1.apps.googleusercontent.com"
-              render={renderProps => (
-                <div className='google mb-3' onClick={renderProps.onClick} disabled={renderProps.disabled}><i className="fab fa-google"></i>Login with Google</div>
-              )}
-              buttonText="Login"
-              onSuccess={this.responseGoogle}
-              onFailure={this.responseGoogle}
-              cookiePolicy={'single_host_origin'} />
+              <GoogleLoginBtn responseGoogle={this.responseGoogle}/>
               <div className='fb-cover'>
-                <FacebookLogin
-              appId="385892928702080"
-              autoLoad={false}
-              fields="name,email,picture"
-              callback={this.responseFacebook} 
-              cssClass="facebook"
-              icon={<div className='facebook' ><i className="fab fa-facebook-f"></i></div>} />
+                <FacebookLoginBtn responseFacebook={this.responseFacebook}/>
               </div>
             </div>
           </div>
@@ -138,7 +127,6 @@ class HomePage extends React.Component {
       </div>
     )  
   }
-  
 }
 
 export default connect (null, {saveUser, saveConnection})(HomePage);

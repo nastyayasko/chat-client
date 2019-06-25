@@ -26,7 +26,7 @@ class Chat extends React.Component {
   chatRef = React.createRef();
   
   toConnect = (user) => {
-    this.connection = window.io.connect('http://192.168.0.154:3020', {reconnection:false});
+    this.connection = window.io.connect('http://localhost:3020', {reconnection:false});
     this.props.saveConnection(this.connection);
     this.connection.emit('user', user);
   }
@@ -88,7 +88,7 @@ class Chat extends React.Component {
     this.chatRef.current.scrollTop = this.chatRef.current.scrollHeight - this.chatRef.current.clientHeight;
   }
   getUsers = () => {
-    axios('http://192.168.0.154:3020/api/all-users')
+    axios('http://localhost:3020/api/all-users')
     .then(resp => {
         const {user} = this.props;
         const people = resp.data.filter(person => person._id !== user._id);
@@ -130,16 +130,8 @@ class Chat extends React.Component {
     this.connection.on('current-dialog', (currentDialog) => {
       this.setState({currentDialog});
     })
-    
-    this.connection.on('connect', () => {
-      console.log('online');
-    });
-
-    this.connection.onclose = () => {
-      console.log('offline');
-    };
-    
   }
+
   componentWillUnmount(){
     this.connection.disconnect();
   }
@@ -153,8 +145,6 @@ class Chat extends React.Component {
           <GroupForm people={people} user={user} title={title} createGroup={this.createGroup} status={status} email={email}/>
         </Modal>
         
-            
-        
         <div className='chat-area' >
           <div className='sidebar'>
             <UserPhoto img={img}/>
@@ -165,7 +155,6 @@ class Chat extends React.Component {
           <div className='list-area'>
             <div className='list-name'>Friends</div>
             <ListArea people={people} currentDialog={currentDialog} user={user} handleConnect={this.handleConnect}/>
-            
           </div>
 
           <div className='messages'>
@@ -184,7 +173,6 @@ class Chat extends React.Component {
           </div>
         </div>
 
-        
       </div>
     )
   }

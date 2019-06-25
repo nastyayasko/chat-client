@@ -9,7 +9,7 @@ class SignUpForm extends React.Component {
     password: '',
     robot: false,
     status:'',
-    url: 'http://192.168.0.154:3020/api/sign-up',
+    url: 'http://localhost:3020/api/sign-up',
   }
 
   handleChange = (e) => {
