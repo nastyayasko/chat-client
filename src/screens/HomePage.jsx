@@ -121,7 +121,7 @@ class HomePage extends React.Component {
                 <input type="email" className="my-input mb-2" placeholder="email" value={email} name="email" onChange={this.handleChange} />
                 <div className="label mt-3">Password</div>
                 <input type="password" className="my-input mb-2" placeholder="password" value={password} name="password" onChange={this.handleChange} />
-                <button type="button" className="login-btn mt-4">Login</button>
+                <button type="submit" className="login-btn mt-4">Login</button>
               </div>
             </form>
 

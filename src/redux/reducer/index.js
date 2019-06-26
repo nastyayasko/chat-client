@@ -2,6 +2,8 @@ const initialState = {
   user: {
     email: '',
   },
+  users: [],
+  dialogs: [],
   connection: null,
 };
 
@@ -17,6 +19,16 @@ export default function reducers(state = initialState, action) {
       return {
         ...state,
         user: {},
+      };
+    case 'GET_USERS_SUCCESS':
+      return {
+        ...state,
+        users: action.payload,
+      };
+    case 'GET_DIALOGS_SUCCESS':
+      return {
+        ...state,
+        dialogs: action.payload,
       };
     case 'SAVE_CONNECTION':
       return {

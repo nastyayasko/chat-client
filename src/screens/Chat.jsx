@@ -4,9 +4,8 @@
 /* eslint-disable react/sort-comp */
 import React from 'react';
 import { connect } from 'react-redux';
-import axios from 'axios';
 import {
-  saveUser, saveConnection, deleteUser, deleteConnection,
+  saveUser, saveConnection, deleteUser, deleteConnection, getUsers, getDialogs,
 } from '../redux/actions';
 import '../styles/Chat.css';
 
@@ -21,10 +20,8 @@ class Chat extends React.Component {
   state = {
     message: '',
     messages: [],
-    people: [],
     status: '',
     isModalOpenAG: false,
-    dialogs: [],
     currentDialog: null,
     dialogName: 'WELCOME!',
   }
@@ -69,7 +66,7 @@ class Chat extends React.Component {
   }
 
   handleConnect = (i) => {
-    const { people } = this.state;
+    const { people } = this.props;
     const person = people.find(user => user._id === i);
     this.connection.emit('connect-user', i);
     this.setState({ status: '', dialogName: `${person.firstName} ${person.lastName}` });
@@ -82,7 +79,7 @@ class Chat extends React.Component {
 
   changeDialog = (id) => {
     this.connection.emit('change-dialog', id);
-    const { dialogs } = this.state;
+    const { dialogs } = this.props;
     const dialog = dialogs.find(d => d._id === id);
     this.setState({ status: '', dialogName: dialog.title });
   }
@@ -100,28 +97,6 @@ class Chat extends React.Component {
     this.chatRef.current.scrollTop = this.chatRef.current.scrollHeight - this.chatRef.current.clientHeight;
   }
 
-  getUsers = () => {
-    axios('http://localhost:3020/api/all-users')
-      .then((resp) => {
-        const { user } = this.props;
-        const people = resp.data.filter(person => person._id !== user._id);
-        if (people && people.length) {
-          this.setState({ people });
-        }
-      })
-      .catch((err) => { throw err; });
-  }
-
-  getDialogs = (id) => {
-    axios(`http://localhost:3020/api/dialogs/${id}`)
-      .then((resp) => {
-        if (resp.data && resp.data.length) {
-          this.setState({ dialogs: resp.data });
-        }
-      })
-      .catch((err) => { throw err; });
-  }
-
   componentDidMount() {
     let currentUser;
     if (localStorage.getItem('myKey')) {
@@ -132,8 +107,8 @@ class Chat extends React.Component {
       this.props.history.push('/');
       return;
     }
-    this.getUsers();
-    this.getDialogs(currentUser._id);
+    this.props.getUsers();
+    this.props.getDialogs(currentUser._id);
 
     this.connection.on('chat', (data) => {
       const { messages, currentDialog } = this.state;
@@ -146,10 +121,10 @@ class Chat extends React.Component {
 
     this.connection.on('dialogs', () => {
       const { user } = this.props;
-      this.getDialogs(user._id);
+      this.props.getDialogs(user._id);
     });
     this.connection.on('all-users', () => {
-      this.getUsers();
+      this.props.getUsers();
     });
     this.connection.on('messages', (messages) => {
       this.setState({ messages });
@@ -165,9 +140,11 @@ class Chat extends React.Component {
   }
 
   render() {
-    const { email, user } = this.props;
     const {
-      message, messages, people, status, isModalOpenAG, dialogs, title, currentDialog, dialogName,
+      email, user, people, dialogs,
+    } = this.props;
+    const {
+      message, messages, status, isModalOpenAG, title, currentDialog, dialogName,
     } = this.state;
     return (
       <div className="my-container clearfix">
@@ -198,9 +175,11 @@ class Chat extends React.Component {
 const mapStateToProps = state => ({
   user: state.user,
   email: state.user.email,
+  people: state.users,
+  dialogs: state.dialogs,
   connection: state.connection,
 });
 
 export default connect(mapStateToProps, {
-  saveUser, saveConnection, deleteUser, deleteConnection,
+  saveUser, saveConnection, deleteUser, deleteConnection, getUsers, getDialogs,
 })(Chat);
