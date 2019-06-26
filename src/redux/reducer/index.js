@@ -1,34 +1,34 @@
 const initialState = {
   user: {
-    email: ''
+    email: '',
   },
-  connection: null
-}
+  connection: null,
+};
 
 
-export default function reducers(state = initialState, action){
-  switch(action.type){
+export default function reducers(state = initialState, action) {
+  switch (action.type) {
     case 'SAVE_USER':
       return {
-        ...state, 
+        ...state,
         user: action.payload,
-    };
+      };
     case 'DELETE_USER':
       return {
-        ...state, 
+        ...state,
         user: {},
-    };
+      };
     case 'SAVE_CONNECTION':
       return {
-        ...state, 
+        ...state,
         connection: action.payload,
-    };
+      };
     case 'DELETE_CONNECTION':
       return {
-        ...state, 
+        ...state,
         connection: {},
-    };
+      };
     default:
       return state;
-    }
+  }
 }
