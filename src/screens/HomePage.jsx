@@ -64,12 +64,15 @@ class HomePage extends React.Component {
     }
   }
 
-  render() {
-    const { isModalOpen } = this.state;
+  componentDidUpdate(prevProps) {
     const { user } = this.props;
-    if (user.email) {
+    if (user !== prevProps.user) {
       this.loginSuccess(user);
     }
+  }
+
+  render() {
+    const { isModalOpen } = this.state;
     return (
       <div className="my-container">
         <Modal isModalOpen={isModalOpen} toggle={this.toggleModal} name="Sign Up">
