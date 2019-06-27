@@ -1,10 +1,9 @@
 const initialState = {
-  user: {
-    email: '',
-  },
+  user: {},
   users: [],
   dialogs: [],
   connection: null,
+  loginStatus: '',
 };
 
 
@@ -29,6 +28,45 @@ export default function reducers(state = initialState, action) {
       return {
         ...state,
         dialogs: action.payload,
+      };
+    case 'SET_LOGINSTATUS':
+      return {
+        ...state,
+        loginStatus: action.payload,
+      };
+    case 'DELETE_LOGINSTATUS':
+      return {
+        ...state,
+        loginStatus: '',
+      };
+    case 'LOGIN_SUCCESS':
+      if (action.payload.status) {
+        return {
+          ...state,
+          loginStatus: action.payload.status,
+        };
+      }
+      return {
+        ...state,
+        loginStatus: '',
+        user: action.payload,
+      };
+    case 'SIGNUP_SUCCESS':
+      if (action.payload.status) {
+        return {
+          ...state,
+          loginStatus: action.payload.status,
+        };
+      }
+      return {
+        ...state,
+        loginStatus: '',
+        user: action.payload,
+      };
+    case 'AUTH_SUCCESS':
+      return {
+        ...state,
+        user: action.payload,
       };
     case 'SAVE_CONNECTION':
       return {

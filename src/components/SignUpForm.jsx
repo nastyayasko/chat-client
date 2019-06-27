@@ -1,6 +1,8 @@
+/* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/no-unescaped-entities */
 import React from 'react';
-import axios from 'axios';
+import { connect } from 'react-redux';
+import { setLoginStatus, signUp } from '../redux/actions';
 
 class SignUpForm extends React.Component {
   state = {
@@ -9,8 +11,6 @@ class SignUpForm extends React.Component {
     lastName: '',
     password: '',
     robot: false,
-    status: '',
-    url: 'http://localhost:3020/api/sign-up',
   }
 
   handleChange = (e) => {
@@ -24,17 +24,15 @@ class SignUpForm extends React.Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    const { login } = this.props;
     const {
       email,
       firstName,
       lastName,
       password,
       robot,
-      url,
     } = this.state;
     if (!email || !firstName || !lastName || !password || !robot) {
-      this.setState({ status: 'Some fields are empty' });
+      this.props.setLoginStatus('Some fields are empty');
       return;
     }
     const user = {
@@ -43,18 +41,11 @@ class SignUpForm extends React.Component {
       lastName,
       password,
     };
-    axios.post(url, user)
-      .then((response) => {
-        if (response.data.client) {
-          this.setState({ status: 'User with this email already exists.' });
-          return;
-        }
-        login(response.data);
-      });
+    this.props.signUp(user);
   }
 
   render() {
-    const { status } = this.state;
+    const { status } = this.props;
     return (
       <form onSubmit={this.handleSubmit}>
         <div className="status">{status}</div>
@@ -77,5 +68,7 @@ class SignUpForm extends React.Component {
     );
   }
 }
-
-export default SignUpForm;
+const mapStateToProps = state => ({
+  status: state.loginStatus,
+});
+export default connect(mapStateToProps, { setLoginStatus, signUp })(SignUpForm);

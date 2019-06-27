@@ -41,7 +41,7 @@ class Chat extends React.Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    const { email } = this.props;
+    const { email } = this.props.user;
     const { message, currentDialog } = this.state;
     if (!message) return;
     if (!currentDialog) {
@@ -141,7 +141,7 @@ class Chat extends React.Component {
 
   render() {
     const {
-      email, user, people, dialogs,
+      user, people, dialogs,
     } = this.props;
     const {
       message, messages, status, isModalOpenAG, title, currentDialog, dialogName,
@@ -149,7 +149,7 @@ class Chat extends React.Component {
     return (
       <div className="my-container clearfix">
         <Modal isModalOpen={isModalOpenAG} toggle={this.toggleModalAG} name="Create a new group">
-          <GroupForm people={people} user={user} title={title} createGroup={this.createGroup} status={status} email={email} />
+          <GroupForm people={people} user={user} title={title} createGroup={this.createGroup} status={status} email={user.email} />
         </Modal>
 
         <div className="chat-area">
@@ -158,14 +158,14 @@ class Chat extends React.Component {
           <MessageArea
             dialogName={dialogName}
             messages={messages}
-            email={email}
+            email={user.email}
             status={status}
             chatRef={this.chatRef}
             handleSubmit={this.handleSubmit}
             handleChange={this.handleChange}
             message={message}
           />
-          <DialogsList dialogs={dialogs} email={email} currentDialog={currentDialog} changeDialog={this.changeDialog} />
+          <DialogsList dialogs={dialogs} email={user.email} currentDialog={currentDialog} changeDialog={this.changeDialog} />
         </div>
       </div>
     );
@@ -174,7 +174,6 @@ class Chat extends React.Component {
 
 const mapStateToProps = state => ({
   user: state.user,
-  email: state.user.email,
   people: state.users,
   dialogs: state.dialogs,
   connection: state.connection,
