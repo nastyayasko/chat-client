@@ -6,10 +6,11 @@ function DialogsList(props) {
   const {
     dialogs, currentDialog, email, changeDialog,
   } = props;
+  const groupDialogs = dialogs.filter(dialog => dialog.type === 'group');
   return (
     <div className="list-area">
       <div className="list-name">Dialogs</div>
-      <DialogsArea dialogs={dialogs} email={email} currentDialog={currentDialog} changeDialog={changeDialog} />
+      <DialogsArea dialogs={groupDialogs} email={email} currentDialog={currentDialog} changeDialog={changeDialog} />
     </div>
   );
 }
