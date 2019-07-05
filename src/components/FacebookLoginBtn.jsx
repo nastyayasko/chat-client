@@ -5,7 +5,7 @@ function FacebookLoginBtn(props) {
   const { responseFacebook } = props;
   return (
     <FacebookLogin
-      appId="385892928702080"
+      appId={process.env.REACT_APP_FB_ID}
       autoLoad={false}
       fields="name,email,picture"
       callback={responseFacebook}

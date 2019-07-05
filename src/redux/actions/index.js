@@ -12,7 +12,7 @@ export const deleteLoginStatus = () => ({ type: 'DELETE_LOGINSTATUS' });
 const getUsersSuccess = users => ({ type: 'GET_USERS_SUCCESS', payload: users });
 
 export const getUsers = () => (dispatch) => {
-  axios('http://localhost:3020/api/all-users')
+  axios(`http://${process.env.REACT_APP_HOST}:3020/api/all-users`)
     .then(({ data }) => dispatch(getUsersSuccess(data)))
     .catch(error => dispatch(console.log(error)));
 };
@@ -20,7 +20,7 @@ export const getUsers = () => (dispatch) => {
 const getDialogsSuccess = users => ({ type: 'GET_DIALOGS_SUCCESS', payload: users });
 
 export const getDialogs = id => (dispatch) => {
-  axios(`http://localhost:3020/api/dialogs/${id}`)
+  axios(`http://${process.env.REACT_APP_HOST}:3020/api/dialogs/${id}`)
     .then(({ data }) => dispatch(getDialogsSuccess(data)))
     .catch(error => dispatch(console.log(error)));
 };
@@ -28,7 +28,7 @@ export const getDialogs = id => (dispatch) => {
 const loginSuccess = users => ({ type: 'LOGIN_SUCCESS', payload: users });
 
 export const login = user => (dispatch) => {
-  axios.post('http://localhost:3020/api/log-in', user)
+  axios.post(`http://${process.env.REACT_APP_HOST}:3020/api/log-in`, user)
     .then(({ data }) => dispatch(loginSuccess(data)))
     .catch(error => dispatch(console.log(error)));
 };
@@ -36,7 +36,7 @@ export const login = user => (dispatch) => {
 const authSuccess = users => ({ type: 'AUTH_SUCCESS', payload: users });
 
 export const auth = user => (dispatch) => {
-  axios.post('http://localhost:3020/api/auth', user)
+  axios.post(`http://${process.env.REACT_APP_HOST}:3020/api/auth`, user)
     .then(({ data }) => dispatch(authSuccess(data)))
     .catch(error => dispatch(console.log(error)));
 };
@@ -44,7 +44,7 @@ export const auth = user => (dispatch) => {
 const signUpSuccess = users => ({ type: 'SIGNUP_SUCCESS', payload: users });
 
 export const signUp = user => (dispatch) => {
-  axios.post('http://localhost:3020/api/sign-up', user)
+  axios.post(`http://${process.env.REACT_APP_HOST}:3020/api/sign-up`, user)
     .then(({ data }) => dispatch(signUpSuccess(data)))
     .catch(error => dispatch(console.log(error)));
 };
@@ -53,7 +53,7 @@ export const signUp = user => (dispatch) => {
 const getMessagesSuccess = users => ({ type: 'GET_MESSAGES_SUCCESS', payload: users });
 
 export const getMessages = id => (dispatch) => {
-  axios.post(`http://localhost:3020/api/messages/${id}`)
+  axios.post(`http://${process.env.REACT_APP_HOST}:3020/api/messages/${id}`)
     .then(({ data }) => dispatch(getMessagesSuccess(data)))
     .catch(error => dispatch(console.log(error)));
 };

@@ -23,12 +23,6 @@ class HomePage extends React.Component {
     isModalOpen: false,
   }
 
-  loginSuccess = (user) => {
-    const localUser = JSON.stringify(user);
-    localStorage.setItem('myKey', localUser);
-    this.props.history.push('/chat');
-  }
-
   toggleModal = () => {
     const { isModalOpen } = this.state;
     this.setState({ isModalOpen: !isModalOpen });
@@ -67,7 +61,9 @@ class HomePage extends React.Component {
   componentDidUpdate(prevProps) {
     const { user } = this.props;
     if (user !== prevProps.user) {
-      this.loginSuccess(user);
+      const localUser = JSON.stringify(user);
+      localStorage.setItem('myKey', localUser);
+      this.props.history.push('/chat');
     }
   }
 

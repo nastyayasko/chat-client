@@ -7,7 +7,7 @@ function GoogleLoginBtn(props) {
   const { responseGoogle } = props;
   return (
     <GoogleLogin
-      clientId="191604032064-8keqk7pfclokcoc6n4un67cmpm49agn1.apps.googleusercontent.com"
+      clientId={process.env.REACT_APP_GOOGLE_ID}
       render={renderProps => (
         <div className="google mb-3" onClick={renderProps.onClick} disabled={renderProps.disabled}>
           <i className="fab fa-google" />

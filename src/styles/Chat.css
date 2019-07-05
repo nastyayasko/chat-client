@@ -3,6 +3,7 @@
   height: 95vh;
   border: 1px solid rgb(204, 204, 203);
   border-top: none;
+  justify-content: center;
 }
 
 .sidebar {
@@ -21,7 +22,10 @@
   max-height: 43px;
   border-radius: 50%;
 }
-.fa-comment-medical, .fa-power-off{
+.new-buttons {
+  display: none;
+}
+.fa-comment-medical, .fa-power-off, .fa-users, .fa-comment{
   color: #ececec;
   display: block;
   text-align: center;
@@ -93,6 +97,8 @@
 }
 .message-form{
   padding: 1%;
+  display: flex;
+  justify-content: space-around;
 }
 .send-message{
   border: none;
@@ -121,3 +127,52 @@
   transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
 
+@media (max-height: 550px) {
+	.fa-paper-plane {
+		font-size: 25px;
+	}
+	.input-message {
+		font-size: 10px;
+  }
+  .fa-comment-medical, .fa-power-off, .fa-users, .fa-comment{
+   font-size: 30px;
+  }
+  .photo {
+    max-width: 27px;
+    max-height: 27px;
+  }
+  .list-name, .dialog-name{
+    padding: 5px 0;
+  }
+}
+
+@media (max-height: 400px) {
+	.fa-paper-plane {
+		font-size: 20px;
+	}
+	.input-message {
+		font-size: 6px;
+  }
+  .list-name, .dialog-name{
+    padding: 0;
+  }
+}
+
+@media (max-width: 800px) {
+	.new-buttons {
+    display: initial;
+  }
+  .non-display {
+    display: none;
+  }
+  .sidebar{
+    width: 25%;
+  } 
+  .messages, .list-friends, .dialogs-list {
+    width: 75%;
+  }
+  .chat-area{
+    height: 85vh;
+    
+  }
+}

@@ -3,7 +3,7 @@ import React from 'react';
 function UserPhoto(props) {
   let { img } = props;
   if (!img) {
-    img = 'https://www.achievesuccesstutoring.com/wp-content/uploads/2019/05/no-photo-icon-22.jpg.png';
+    img = process.env.REACT_APP_USER_PIC;
   }
   return (
     <div className="user-photo">

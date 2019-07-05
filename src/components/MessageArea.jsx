@@ -4,10 +4,10 @@ import ChatArea from './ChatArea';
 
 function MessageArea(props) {
   const {
-    dialogName, messages, email, status, chatRef, handleSubmit, handleChange, message,
+    dialogName, messages, email, status, chatRef, handleSubmit, handleChange, message, menu,
   } = props;
   return (
-    <div className="messages">
+    <div className={menu === 'messages' ? 'messages' : 'messages non-display'}>
       <div className="dialog-name">
         {dialogName}
         <div className="status-chat mt-3">{status}</div>
@@ -16,7 +16,7 @@ function MessageArea(props) {
       <div className="message-area">
         <form onSubmit={handleSubmit} className="message-form">
           <input type="text" autoFocus onChange={handleChange} name="message" value={message} className="input-message" placeholder="Message" />
-          <button type="button" className="send-message"><i className="fas fa-paper-plane" /></button>
+          <button type="submit" className="send-message"><i className="fas fa-paper-plane" /></button>
         </form>
       </div>
     </div>

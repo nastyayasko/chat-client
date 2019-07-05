@@ -24,14 +24,15 @@ class Chat extends React.Component {
     isModalOpenAG: false,
     currentDialog: null,
     dialogName: 'WELCOME!',
+    menu: 'messages',
   }
 
   chatRef = React.createRef();
 
   toConnect = (user) => {
-    this.connection = window.io.connect('http://localhost:3020', { reconnection: false });
-    this.props.saveConnection(this.connection);
-    this.connection.emit('user', user);
+    const connection = window.io.connect(`http://${process.env.REACT_APP_HOST}:3020`, { reconnection: false });
+    this.props.saveConnection(connection);
+    connection.emit('user', user);
   }
 
   handleChange = (e) => {
@@ -54,12 +55,12 @@ class Chat extends React.Component {
       email, message, time: newTime, currentDialog: currentDialog._id,
     };
     this.setState({ message: '' });
-    this.connection.emit('chat', myMesage);
+    this.props.connection.emit('chat', myMesage);
   }
 
   handleLogout = () => {
     this.props.deleteUser();
-    this.connection.disconnect();
+    this.props.connection.disconnect();
     this.props.deleteConnection();
     localStorage.removeItem('myKey');
     this.props.history.push('/');
@@ -68,7 +69,7 @@ class Chat extends React.Component {
   handleConnect = (i) => {
     const { people } = this.props;
     const person = people.find(user => user._id === i);
-    this.connection.emit('connect-user', i);
+    this.props.connection.emit('connect-user', i);
     this.setState({ status: '', dialogName: `${person.firstName} ${person.lastName}` });
   }
 
@@ -78,7 +79,7 @@ class Chat extends React.Component {
   }
 
   changeDialog = (id) => {
-    this.connection.emit('change-dialog', id);
+    this.props.connection.emit('change-dialog', id);
     const { dialogs } = this.props;
     const dialog = dialogs.find(d => d._id === id);
     this.setState({ status: '', dialogName: dialog.title });
@@ -89,7 +90,7 @@ class Chat extends React.Component {
       this.setState({ status: 'Some fields are empty' });
       return;
     }
-    this.connection.emit('new-group', group);
+    this.props.connection.emit('new-group', group);
     this.toggleModalAG();
   }
 
@@ -97,12 +98,20 @@ class Chat extends React.Component {
     this.chatRef.current.scrollTop = this.chatRef.current.scrollHeight - this.chatRef.current.clientHeight;
   }
 
+  chooseMenu = (menu) => {
+    this.setState({ menu });
+  }
+
   componentDidMount() {
     let currentUser;
+    let connection;
     if (localStorage.getItem('myKey')) {
       currentUser = JSON.parse(localStorage.myKey);
       this.props.saveUser(currentUser);
-      this.toConnect(currentUser);
+      // this.toConnect(currentUser);
+      connection = window.io.connect(`http://${process.env.REACT_APP_HOST}:3020`, { reconnection: false });
+      this.props.saveConnection(connection);
+      connection.emit('user', currentUser);
     } else {
       this.props.history.push('/');
       return;
@@ -110,7 +119,7 @@ class Chat extends React.Component {
     this.props.getUsers();
     this.props.getDialogs(currentUser._id);
 
-    this.connection.on('chat', (data) => {
+    connection.on('chat', (data) => {
       const { messages, currentDialog } = this.state;
       if (currentDialog && currentDialog._id === data.currentDialog) {
         messages.push(data);
@@ -119,24 +128,25 @@ class Chat extends React.Component {
       }
     });
 
-    this.connection.on('dialogs', () => {
+    connection.on('dialogs', () => {
       const { user } = this.props;
       this.props.getDialogs(user._id);
     });
-    this.connection.on('all-users', () => {
+    connection.on('all-users', () => {
       this.props.getUsers();
     });
-    this.connection.on('messages', (messages) => {
+    connection.on('messages', (messages) => {
       this.setState({ messages });
       this.scrollToBottom();
     });
-    this.connection.on('current-dialog', (currentDialog) => {
+    connection.on('current-dialog', (currentDialog) => {
       this.setState({ currentDialog });
     });
   }
 
   componentWillUnmount() {
-    this.connection.disconnect();
+    this.props.connection.disconnect();
+    this.props.deleteConnection();
   }
 
   render() {
@@ -144,7 +154,7 @@ class Chat extends React.Component {
       user, people, dialogs,
     } = this.props;
     const {
-      message, messages, status, isModalOpenAG, title, currentDialog, dialogName,
+      message, messages, status, isModalOpenAG, title, currentDialog, dialogName, menu,
     } = this.state;
     return (
       <div className="my-container clearfix">
@@ -153,8 +163,20 @@ class Chat extends React.Component {
         </Modal>
 
         <div className="chat-area">
-          <Sidebar img={user.img} toggleModalAG={this.toggleModalAG} handleLogout={this.handleLogout} />
-          <FriendsList people={people} currentDialog={currentDialog} user={user} handleConnect={this.handleConnect} />
+          <Sidebar
+            img={user.img}
+            toggleModalAG={this.toggleModalAG}
+            handleLogout={this.handleLogout}
+            choose={this.chooseMenu}
+          />
+          <FriendsList
+            people={people}
+            currentDialog={currentDialog}
+            user={user}
+            handleConnect={this.handleConnect}
+            choose={this.chooseMenu}
+            menu={menu}
+          />
           <MessageArea
             dialogName={dialogName}
             messages={messages}
@@ -164,8 +186,17 @@ class Chat extends React.Component {
             handleSubmit={this.handleSubmit}
             handleChange={this.handleChange}
             message={message}
+            choose={this.chooseMenu}
+            menu={menu}
           />
-          <DialogsList dialogs={dialogs} email={user.email} currentDialog={currentDialog} changeDialog={this.changeDialog} />
+          <DialogsList
+            dialogs={dialogs}
+            email={user.email}
+            currentDialog={currentDialog}
+            changeDialog={this.changeDialog}
+            choose={this.chooseMenu}
+            menu={menu}
+          />
         </div>
       </div>
     );

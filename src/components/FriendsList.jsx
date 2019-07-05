@@ -5,13 +5,13 @@ import ListArea from './ListArea';
 
 function FriendsList(props) {
   const {
-    people, currentDialog, user, handleConnect,
+    people, currentDialog, user, handleConnect, menu, choose,
   } = props;
   const users = people.filter(i => i._id !== user._id);
   return (
-    <div className="list-area">
+    <div className={menu === 'users' ? 'list-area list-friends' : 'list-area list-friends non-display'}>
       <div className="list-name">Friends</div>
-      <ListArea people={users} currentDialog={currentDialog} user={user} handleConnect={handleConnect} />
+      <ListArea people={users} currentDialog={currentDialog} user={user} handleConnect={handleConnect} choose={choose} />
     </div>
   );
 }

@@ -4,7 +4,9 @@
 import React from 'react';
 
 function DialogsArea(props) {
-  const { dialogs, changeDialog, currentDialog } = props;
+  const {
+    dialogs, changeDialog, currentDialog, choose,
+  } = props;
   let current;
   if (currentDialog && currentDialog.type === 'group') {
     current = currentDialog.title;
@@ -13,7 +15,7 @@ function DialogsArea(props) {
     <div className="dialogs-area">
       {
         dialogs.map(dialog => (
-          <div className="dialog" key={dialog._id} onClick={() => { changeDialog(dialog._id); }}>
+          <div className="dialog" key={dialog._id} onClick={() => { changeDialog(dialog._id); choose('messages'); }}>
             <div>
               <img className="photo-m mr-1" src={dialog.img} alt="faces" />
             </div>
