@@ -69,6 +69,11 @@ export default function reducers(state = initialState, action) {
         ...state,
         user: action.payload,
       };
+    case 'CHECK_TOKEN_SUCCESS':
+      return {
+        ...state,
+        user: action.payload,
+      };
     case 'GET_MESSAGES_SUCCESS':
       return {
         ...state,

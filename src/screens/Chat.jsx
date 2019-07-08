@@ -5,7 +5,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {
-  saveUser, saveConnection, deleteUser, deleteConnection, getUsers, getDialogs,
+  saveUser, saveConnection, deleteUser, deleteConnection, getUsers, getDialogs, checkToken,
 } from '../redux/actions';
 import '../styles/Chat.css';
 
@@ -15,6 +15,7 @@ import MessageArea from '../components/MessageArea';
 import DialogsList from '../components/DialogsList';
 import Modal from '../components/Modal';
 import GroupForm from '../components/GroupForm';
+import createConnection from '../functions';
 
 class Chat extends React.Component {
   state = {
@@ -29,10 +30,13 @@ class Chat extends React.Component {
 
   chatRef = React.createRef();
 
-  toConnect = (user) => {
-    const connection = window.io.connect(`http://${process.env.REACT_APP_HOST}:3020`, { reconnection: false });
-    this.props.saveConnection(connection);
+  toConnect = () => {
+    const { user } = this.props;
+    const connection = createConnection(this, user);
     connection.emit('user', user);
+    this.props.saveConnection(connection);
+    this.props.getUsers();
+    this.props.getDialogs(user._id);
   }
 
   handleChange = (e) => {
@@ -62,7 +66,7 @@ class Chat extends React.Component {
     this.props.deleteUser();
     this.props.connection.disconnect();
     this.props.deleteConnection();
-    localStorage.removeItem('myKey');
+    localStorage.removeItem('myToken');
     this.props.history.push('/');
   }
 
@@ -94,54 +98,26 @@ class Chat extends React.Component {
     this.toggleModalAG();
   }
 
-  scrollToBottom() {
-    this.chatRef.current.scrollTop = this.chatRef.current.scrollHeight - this.chatRef.current.clientHeight;
-  }
-
   chooseMenu = (menu) => {
     this.setState({ menu });
   }
 
   componentDidMount() {
-    let currentUser;
-    let connection;
-    if (localStorage.getItem('myKey')) {
-      currentUser = JSON.parse(localStorage.myKey);
-      this.props.saveUser(currentUser);
-      // this.toConnect(currentUser);
-      connection = window.io.connect(`http://${process.env.REACT_APP_HOST}:3020`, { reconnection: false });
-      this.props.saveConnection(connection);
-      connection.emit('user', currentUser);
+    if (this.props.user.email) {
+      this.toConnect();
+    } else if (!this.props.user.email && localStorage.getItem('myToken')) {
+      const token = localStorage.myToken;
+      this.props.checkToken(token);
     } else {
       this.props.history.push('/');
-      return;
     }
-    this.props.getUsers();
-    this.props.getDialogs(currentUser._id);
+  }
 
-    connection.on('chat', (data) => {
-      const { messages, currentDialog } = this.state;
-      if (currentDialog && currentDialog._id === data.currentDialog) {
-        messages.push(data);
-        this.setState({ messages });
-        this.scrollToBottom();
-      }
-    });
-
-    connection.on('dialogs', () => {
-      const { user } = this.props;
-      this.props.getDialogs(user._id);
-    });
-    connection.on('all-users', () => {
-      this.props.getUsers();
-    });
-    connection.on('messages', (messages) => {
-      this.setState({ messages });
-      this.scrollToBottom();
-    });
-    connection.on('current-dialog', (currentDialog) => {
-      this.setState({ currentDialog });
-    });
+  componentDidUpdate(prevProps) {
+    const { user } = this.props;
+    if (user !== prevProps.user) {
+      this.toConnect();
+    }
   }
 
   componentWillUnmount() {
@@ -211,5 +187,5 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps, {
-  saveUser, saveConnection, deleteUser, deleteConnection, getUsers, getDialogs,
+  saveUser, saveConnection, deleteUser, deleteConnection, getUsers, getDialogs, checkToken,
 })(Chat);

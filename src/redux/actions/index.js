@@ -57,3 +57,11 @@ export const getMessages = id => (dispatch) => {
     .then(({ data }) => dispatch(getMessagesSuccess(data)))
     .catch(error => dispatch(console.log(error)));
 };
+
+const checkTokenSuccess = user => ({ type: 'CHECK_TOKEN_SUCCESS', payload: user });
+
+export const checkToken = token => (dispatch) => {
+  axios(`http://${process.env.REACT_APP_HOST}:3020/api/log-in/${token}`)
+    .then(({ data }) => dispatch(checkTokenSuccess(data)))
+    .catch(error => dispatch(console.log(error)));
+};

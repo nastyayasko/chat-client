@@ -59,7 +59,7 @@ class GroupForm extends React.Component {
             ))
           }
         </div>
-        <button className="btn-creater" type="button">Create</button>
+        <button className="btn-creater" type="submit">Create</button>
       </form>
     );
   }

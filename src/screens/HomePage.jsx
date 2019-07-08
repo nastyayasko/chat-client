@@ -6,7 +6,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {
-  saveUser, saveConnection, setLoginStatus, deleteLoginStatus, auth,
+  saveUser, saveConnection, setLoginStatus, deleteLoginStatus, auth, checkToken,
 } from '../redux/actions';
 
 import '../styles/HomePage.css';
@@ -34,7 +34,6 @@ class HomePage extends React.Component {
       firstName: response.w3.ofa,
       lastName: response.w3.wea,
       img: response.w3.Paa,
-      token: response.tokenObj.access_token,
     };
     this.props.auth(user);
   }
@@ -45,24 +44,21 @@ class HomePage extends React.Component {
       firstName: response.name.split(' ')[0],
       lastName: response.name.split(' ')[1],
       img: response.picture.data.url,
-      token: response.accessToken,
     };
     this.props.auth(user);
   }
 
   componentDidMount() {
-    if (localStorage.getItem('myKey')) {
-      const user = JSON.parse(localStorage.myKey);
-      this.props.saveUser(user);
-      this.props.history.push('/chat');
+    if (localStorage.getItem('myToken')) {
+      const token = localStorage.myToken;
+      this.props.checkToken(token);
     }
   }
 
   componentDidUpdate(prevProps) {
     const { user } = this.props;
     if (user !== prevProps.user) {
-      const localUser = JSON.stringify(user);
-      localStorage.setItem('myKey', localUser);
+      localStorage.setItem('myToken', user.token);
       this.props.history.push('/chat');
     }
   }
@@ -93,5 +89,5 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps, {
-  saveUser, saveConnection, setLoginStatus, deleteLoginStatus, auth,
+  saveUser, saveConnection, setLoginStatus, deleteLoginStatus, auth, checkToken,
 })(HomePage);
