@@ -37,8 +37,11 @@ class GroupForm extends React.Component {
   }
 
   render() {
-    const { people, createGroup, status } = this.props;
+    const {
+      people, createGroup, status, user,
+    } = this.props;
     const { title } = this.state;
+    const users = people.filter(person => person.email !== user.email);
     return (
       <form onSubmit={(e) => {
         e.preventDefault();
@@ -51,10 +54,10 @@ class GroupForm extends React.Component {
           <input type="text" className="form-control" placeholder="Name" onChange={this.handleChange} name="title" value={title} />
           <div className="mt-2">Choose people</div>
           {
-            people.map(user => (
-              <div className="form-check mt-3 mb-1" key={user._id}>
-                <input className="form-check-input" type="checkbox" id={user._id} onChange={this.checkedBoxes} />
-                <div className="form-check-label">{user.email}</div>
+            users.map(person => (
+              <div className="form-check mt-3 mb-1" key={person._id}>
+                <input className="form-check-input" type="checkbox" id={person._id} onChange={this.checkedBoxes} />
+                <div className="form-check-label">{person.email}</div>
               </div>
             ))
           }
