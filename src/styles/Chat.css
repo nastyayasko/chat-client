@@ -18,8 +18,8 @@
   border-bottom: 1px solid rgb(204, 204, 203);
 }
 .photo{
-  max-width: 43px;
-  max-height: 43px;
+  width: 43px;
+  height: 43px;
   border-radius: 50%;
 }
 .new-buttons {

@@ -5,9 +5,7 @@
 /* eslint-disable react/destructuring-assignment */
 import React from 'react';
 import { connect } from 'react-redux';
-import {
-  saveUser, saveConnection, setLoginStatus, deleteLoginStatus, auth, checkToken,
-} from '../redux/actions';
+import { auth, checkToken, deleteLoginStatus } from '../redux/actions';
 
 import '../styles/HomePage.css';
 
@@ -26,6 +24,7 @@ class HomePage extends React.Component {
   toggleModal = () => {
     const { isModalOpen } = this.state;
     this.setState({ isModalOpen: !isModalOpen });
+    this.props.deleteLoginStatus();
   }
 
   responseGoogle = (response) => {
@@ -50,8 +49,7 @@ class HomePage extends React.Component {
 
   componentDidMount() {
     if (localStorage.getItem('myToken')) {
-      const token = localStorage.myToken;
-      this.props.checkToken(token);
+      this.props.checkToken(localStorage.getItem('myToken'));
     }
   }
 
@@ -88,6 +86,4 @@ const mapStateToProps = state => ({
   user: state.user,
 });
 
-export default connect(mapStateToProps, {
-  saveUser, saveConnection, setLoginStatus, deleteLoginStatus, auth, checkToken,
-})(HomePage);
+export default connect(mapStateToProps, { auth, checkToken, deleteLoginStatus })(HomePage);

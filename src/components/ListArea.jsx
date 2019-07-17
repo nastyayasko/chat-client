@@ -5,10 +5,9 @@ import React from 'react';
 
 function ListArea(props) {
   const {
-    people, handleConnect, currentDialog, user, choose,
+    people, handleConnect, currentDialog, user,
   } = props;
   let current;
-  const photo = process.env.REACT_APP_USER_PIC;
   if (currentDialog && currentDialog.type === 'individual') {
     current = currentDialog.users.find(person => person !== user._id);
   }
@@ -19,14 +18,11 @@ function ListArea(props) {
           people.map(person => (
             <div
               className={person._id === current ? 'person m-1 currentPerson' : 'person m-1'}
-              onClick={() => {
-                handleConnect(person._id);
-                choose('messages');
-              }}
+              onClick={() => { handleConnect(person._id); }}
               key={person._id}
             >
               <div>
-                <img className="photo-m mr-1" src={person.img ? person.img : photo} alt="faces" />
+                <img className="photo-m mr-1" src={person.img} alt="faces" />
               </div>
               <div className="m-1 email">{`${person.firstName} ${person.lastName}`}</div>
             </div>

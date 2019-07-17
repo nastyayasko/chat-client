@@ -4,7 +4,7 @@ import DialogsArea from './DialogsArea';
 
 function DialogsList(props) {
   const {
-    dialogs, currentDialog, email, changeDialog, menu, choose,
+    dialogs, currentDialog, email, changeDialog, menu,
   } = props;
   const groupDialogs = dialogs.filter(dialog => dialog.type === 'group');
   return (
@@ -15,7 +15,6 @@ function DialogsList(props) {
         email={email}
         currentDialog={currentDialog}
         changeDialog={changeDialog}
-        choose={choose}
       />
     </div>
   );

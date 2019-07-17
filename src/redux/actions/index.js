@@ -43,8 +43,16 @@ export const auth = user => (dispatch) => {
 
 const signUpSuccess = users => ({ type: 'SIGNUP_SUCCESS', payload: users });
 
-export const signUp = user => (dispatch) => {
-  axios.post(`http://${process.env.REACT_APP_HOST}:3020/api/sign-up`, user)
+export const signUp = (user, file) => (dispatch) => {
+  const currentUser = new FormData();
+  currentUser.append('email', user.email);
+  currentUser.append('firstName', user.firstName);
+  currentUser.append('lastName', user.lastName);
+  currentUser.append('password', user.password);
+  if (file) {
+    currentUser.append('file', file, file.name);
+  }
+  axios.post(`http://${process.env.REACT_APP_HOST}:3020/api/sign-up`, currentUser)
     .then(({ data }) => dispatch(signUpSuccess(data)))
     .catch(error => dispatch(console.log(error)));
 };

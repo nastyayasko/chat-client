@@ -1,12 +1,12 @@
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-underscore-dangle */
+/* eslint-disable consistent-return */
 import React from 'react';
 
 class GroupForm extends React.Component {
   state = {
     title: '',
     chosen: {},
-    img: 'https://www.applozic.com/resources/lib/advanced/css/app/images/mck-icon-group.png',
   }
 
   handleChange = (e) => {
@@ -20,9 +20,10 @@ class GroupForm extends React.Component {
     this.setState({ chosen });
   }
 
-  handleSubmit = () => {
-    const { user } = this.props;
-    const { title, chosen, img } = this.state;
+  handleSubmit = (e) => {
+    e.preventDefault();
+    const { user, createGroup } = this.props;
+    const { title, chosen } = this.state;
     const users = [];
     for (const key in chosen) {
       if (chosen[key]) {
@@ -31,23 +32,20 @@ class GroupForm extends React.Component {
     }
     if (!title || !users.length) return null;
     users.push(user._id);
-    return {
-      type: 'group', title, users, img,
+    const group = {
+      type: 'group', title, users,
     };
+    createGroup(group);
   }
 
   render() {
     const {
-      people, createGroup, status, user,
+      people, status, user,
     } = this.props;
     const { title } = this.state;
     const users = people.filter(person => person.email !== user.email);
     return (
-      <form onSubmit={(e) => {
-        e.preventDefault();
-        createGroup(this.handleSubmit());
-      }}
-      >
+      <form onSubmit={this.handleSubmit}>
         <div className="status">{status}</div>
         <div className="form-group">
           <div>Group name</div>

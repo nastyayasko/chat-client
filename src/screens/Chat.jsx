@@ -74,6 +74,7 @@ class Chat extends React.Component {
     const { people } = this.props;
     const person = people.find(user => user._id === i);
     this.props.connection.emit('connect-user', i);
+    this.chooseMenu('messages');
     this.setState({ status: '', dialogName: `${person.firstName} ${person.lastName}` });
   }
 
@@ -86,6 +87,7 @@ class Chat extends React.Component {
     this.props.connection.emit('change-dialog', id);
     const { dialogs } = this.props;
     const dialog = dialogs.find(d => d._id === id);
+    this.chooseMenu('messages');
     this.setState({ status: '', dialogName: dialog.title });
   }
 
@@ -106,8 +108,7 @@ class Chat extends React.Component {
     if (this.props.user.email) {
       this.toConnect();
     } else if (!this.props.user.email && localStorage.getItem('myToken')) {
-      const token = localStorage.myToken;
-      this.props.checkToken(token);
+      this.props.checkToken(localStorage.getItem('myToken'));
     } else {
       this.props.history.push('/');
     }
@@ -150,7 +151,6 @@ class Chat extends React.Component {
             currentDialog={currentDialog}
             user={user}
             handleConnect={this.handleConnect}
-            choose={this.chooseMenu}
             menu={menu}
           />
           <MessageArea
@@ -162,7 +162,6 @@ class Chat extends React.Component {
             handleSubmit={this.handleSubmit}
             handleChange={this.handleChange}
             message={message}
-            choose={this.chooseMenu}
             menu={menu}
           />
           <DialogsList
@@ -170,7 +169,6 @@ class Chat extends React.Component {
             email={user.email}
             currentDialog={currentDialog}
             changeDialog={this.changeDialog}
-            choose={this.chooseMenu}
             menu={menu}
           />
         </div>
