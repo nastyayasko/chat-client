@@ -12,7 +12,7 @@ export const deleteLoginStatus = () => ({ type: 'DELETE_LOGINSTATUS' });
 const getUsersSuccess = users => ({ type: 'GET_USERS_SUCCESS', payload: users });
 
 export const getUsers = () => (dispatch) => {
-  axios(`http://${process.env.REACT_APP_HOST}:3020/api/all-users`)
+  axios('https://shielded-lake-66352.herokuapp.com/api/all-users')
     .then(({ data }) => dispatch(getUsersSuccess(data)))
     .catch(error => dispatch(console.log(error)));
 };
@@ -20,7 +20,7 @@ export const getUsers = () => (dispatch) => {
 const getDialogsSuccess = users => ({ type: 'GET_DIALOGS_SUCCESS', payload: users });
 
 export const getDialogs = id => (dispatch) => {
-  axios(`http://${process.env.REACT_APP_HOST}:3020/api/dialogs/${id}`)
+  axios(`https://shielded-lake-66352.herokuapp.com/api/dialogs/${id}`)
     .then(({ data }) => dispatch(getDialogsSuccess(data)))
     .catch(error => dispatch(console.log(error)));
 };
@@ -28,7 +28,7 @@ export const getDialogs = id => (dispatch) => {
 const loginSuccess = users => ({ type: 'LOGIN_SUCCESS', payload: users });
 
 export const login = user => (dispatch) => {
-  axios.post(`http://${process.env.REACT_APP_HOST}:3020/api/log-in`, user)
+  axios.post('https://shielded-lake-66352.herokuapp.com/api/log-in', user)
     .then(({ data }) => dispatch(loginSuccess(data)))
     .catch(error => dispatch(console.log(error)));
 };
@@ -36,7 +36,7 @@ export const login = user => (dispatch) => {
 const authSuccess = users => ({ type: 'AUTH_SUCCESS', payload: users });
 
 export const auth = user => (dispatch) => {
-  axios.post(`http://${process.env.REACT_APP_HOST}:3020/api/auth`, user)
+  axios.post('https://shielded-lake-66352.herokuapp.com/api/auth', user)
     .then(({ data }) => dispatch(authSuccess(data)))
     .catch(error => dispatch(console.log(error)));
 };
@@ -52,7 +52,7 @@ export const signUp = (user, file) => (dispatch) => {
   if (file) {
     currentUser.append('file', file, file.name);
   }
-  axios.post(`http://${process.env.REACT_APP_HOST}:3020/api/sign-up`, currentUser)
+  axios.post('https://shielded-lake-66352.herokuapp.com/api/sign-up', currentUser)
     .then(({ data }) => dispatch(signUpSuccess(data)))
     .catch(error => dispatch(console.log(error)));
 };
@@ -61,7 +61,7 @@ export const signUp = (user, file) => (dispatch) => {
 const getMessagesSuccess = users => ({ type: 'GET_MESSAGES_SUCCESS', payload: users });
 
 export const getMessages = id => (dispatch) => {
-  axios.post(`http://${process.env.REACT_APP_HOST}:3020/api/messages/${id}`)
+  axios.post(`https://shielded-lake-66352.herokuapp.com/api/messages/${id}`)
     .then(({ data }) => dispatch(getMessagesSuccess(data)))
     .catch(error => dispatch(console.log(error)));
 };
@@ -69,7 +69,7 @@ export const getMessages = id => (dispatch) => {
 const checkTokenSuccess = user => ({ type: 'CHECK_TOKEN_SUCCESS', payload: user });
 
 export const checkToken = token => (dispatch) => {
-  axios(`http://${process.env.REACT_APP_HOST}:3020/api/log-in/${token}`)
+  axios(`https://shielded-lake-66352.herokuapp.com/api/log-in/${token}`)
     .then(({ data }) => dispatch(checkTokenSuccess(data)))
     .catch(error => dispatch(console.log(error)));
 };

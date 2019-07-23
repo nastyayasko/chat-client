@@ -5,7 +5,7 @@ function scrollToBottom(ref) {
 }
 
 export default function createConnection(context, user) {
-  const connection = window.io.connect(`http://${process.env.REACT_APP_HOST}:3020`, { reconnection: false });
+  const connection = window.io.connect('https://shielded-lake-66352.herokuapp.com/', { reconnection: false });
   connection.on('chat', (data) => {
     const { messages, currentDialog } = context.state;
     if (currentDialog && currentDialog._id === data.currentDialog) {
